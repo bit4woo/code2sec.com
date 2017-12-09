@@ -12,7 +12,7 @@
 
 
 
-### 0x1、[思维导图](/tree/master/xmind)
+### 0x1、[思维导图](./tree/master/xmind)
 
 
 
