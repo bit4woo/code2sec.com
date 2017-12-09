@@ -6,3 +6,4 @@ __github__ = 'https://github.com/bit4woo'
 import os
 
 print os.system("whoami")
+print  os.
