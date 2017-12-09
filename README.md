@@ -16,15 +16,15 @@
 
 
 
-跨域资源共享(CORS)基础  [大图](https://raw.githubusercontent.com/bit4woo/sharexmind/master/xmind/%E8%B7%A8%E5%9F%9F%E8%B5%84%E6%BA%90%E5%85%B1%E4%BA%AB(CORS).png)  [xmind](https://raw.githubusercontent.com/bit4woo/sharexmind/master/xmind/%E8%B7%A8%E5%9F%9F%E8%B5%84%E6%BA%90%E5%85%B1%E4%BA%AB(CORS).xmind)
+跨域资源共享(CORS)基础  [大图](https://github.com/bit4woo/code2sec.com/raw/master/xmind/%E8%B7%A8%E5%9F%9F%E8%B5%84%E6%BA%90%E5%85%B1%E4%BA%AB(CORS).png)  [xmind](https://github.com/bit4woo/code2sec.com/raw/master/xmind/%E8%B7%A8%E5%9F%9F%E8%B5%84%E6%BA%90%E5%85%B1%E4%BA%AB(CORS).xmind)
 
-CSP(内容安全策略)基础  [大图](https://raw.githubusercontent.com/bit4woo/sharexmind/xmind/master/CSP.png)  [xmind](https://github.com/bit4woo/sharexmind/xmind/raw/master/CSP.xmind)
+CSP(内容安全策略)基础  [大图](https://github.com/bit4woo/code2sec.com/raw/master/xmind/CSP.png)  [xmind](https://github.com/bit4woo/code2sec.com/raw/master/xmind/CSP.xmind)
 
-Powershell执行策略基础及绕过姿势 [大图](https://raw.githubusercontent.com/bit4woo/sharexmind/xmind/master/Powershell.png)  [xmind](https://github.com/bit4woo/sharexmind/xmind/raw/master/Powershell.xmind)
+Powershell执行策略基础及绕过姿势 [大图](https://github.com/bit4woo/code2sec.com/raw/master/xmind/Powershell.png)  [xmind](https://github.com/bit4woo/code2sec.com/raw/master/xmind/Powershell.xmind)
 
-Docker常用操作命令思维导图 [大图](https://github.com/bit4woo/sharexmind/xmind/raw/master/Docker.png)  [xmind](https://github.com/bit4woo/sharexmind/xmind/blob/master/Docker.xmind)
+Docker常用操作命令思维导图 [大图](https://github.com/bit4woo/code2sec.com/raw/master/xmind/Docker.png)  [xmind](https://github.com/bit4woo/code2sec.com/raw/master/xmind/Docker.xmind)
 
-web架构中的安全问题 [大图](https://raw.githubusercontent.com/bit4woo/code2sec.com/master/xmind/Web%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98.png)  [xmind](https://raw.githubusercontent.com/bit4woo/code2sec.com/master/xmind/Web%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98.xmind)
+web架构中的安全问题 [大图](https://github.com/bit4woo/code2sec.com/raw/master/xmind/Web%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98.png)  [xmind](https://github.com/bit4woo/code2sec.com/raw/master/xmind/Web%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98.xmind)
 
 
 
