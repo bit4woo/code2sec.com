@@ -168,7 +168,7 @@ yaml.load(file('simple.yml', 'r'))
 
 本文测试代码地址
 
-<https://github.com/bit4woo/sharexmind/tree/master/YamlRCE>
+<https://github.com/bit4woo/code2sec.com/tree/master/code/YamlRCE>
 
 ### **0x4 参考**
 
