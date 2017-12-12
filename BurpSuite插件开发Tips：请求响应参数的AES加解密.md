@@ -1,7 +1,7 @@
 Title: BurpSuite插件开发Tips：请求响应参数的AES加解密
 Date: 2017-01-07 10:20
-Category: Java,安全工具
-Tags: Java, Burpsuite Extender,工具
+Category: Java
+Tags: Java, Burpsuite Extender,安全工具
 Slug: 
 Authors: bit4
 Summary: 

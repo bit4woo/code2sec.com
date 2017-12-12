@@ -1,7 +1,7 @@
 Title: Python Pickle的任意代码执行漏洞实践和Payload构造
 Date: 2017-03-22 10:20
-Category: Python,漏洞
-Tags: python, Pickle,漏洞
+Category: Python
+Tags: python, Pickle, 漏洞
 Slug: 
 Authors: bit4
 Summary: 

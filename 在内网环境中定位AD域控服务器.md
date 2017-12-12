@@ -1,7 +1,7 @@
 Title: 在内网环境中定位AD域控服务器
 Date: 2017-09-07 10:20
-Category: 基础知识、内网渗透
-Tags: 域控、AD
+Category: 内网渗透
+Tags: 域控、AD、内网渗透
 Slug: 
 Authors: bit4
 Summary: 

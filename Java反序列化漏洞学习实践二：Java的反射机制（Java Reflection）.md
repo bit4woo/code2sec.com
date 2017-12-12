@@ -1,6 +1,6 @@
 Title: Java反序列化漏洞学习实践二：Java的反射机制（Java Reflection）
 Date: 2017-12-05 10:20
-Category: Java,基础知识
+Category: Java
 Tags: Java,反序列化,漏洞
 Slug: 
 Authors: bit4

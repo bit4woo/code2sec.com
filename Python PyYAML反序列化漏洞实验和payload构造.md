@@ -1,6 +1,6 @@
 Title:Python PyYAML反序列化漏洞实验和payload构造
 Date: 2017-09-22 10:20
-Category: python,漏洞
+Category: python
 Tags: python,PyYAML,反序列化,漏洞
 Slug: 
 Authors: bit4
