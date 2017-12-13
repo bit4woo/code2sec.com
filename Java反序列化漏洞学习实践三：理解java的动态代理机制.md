@@ -93,7 +93,7 @@ class ProxySubject extends Subject//关键是类的继承
 
 运行效果：
 
-![img](http://www.code2sec.com/wp-content/uploads/2017/12/5f10310db2cb3d27b5462885a0256cc4.png)
+![img](img/JavaDeserStep3/1.png)
 
 ### **0x2、动态代理demo及理解**
 
@@ -189,7 +189,7 @@ class Handler implements InvocationHandler{
 
 运行效果：
 
-![img](http://www.code2sec.com/wp-content/uploads/2017/12/1fb9d14f1409edeea1cd047fc6db3a7a.png)
+![img](img/JavaDeserStep3/2.png)
 
 ### 0x3、思考总结
 
