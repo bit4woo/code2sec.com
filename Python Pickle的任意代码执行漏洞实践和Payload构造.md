@@ -1,6 +1,6 @@
 Title: Python Pickle的任意代码执行漏洞实践和Payload构造
 Date: 2017-03-22 10:20
-Category: 漏洞
+Category: 漏洞实践
 Tags: python, Pickle, 漏洞,反序列化
 Slug: 
 Authors: bit4
