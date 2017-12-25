@@ -1,6 +1,6 @@
 Title:Java反序列化漏洞学习实践一：从Serializbale接口开始，先弹个计算器
 Date: 2017-12-05 10:20
-Category: 漏洞
+Category: 漏洞实践
 Tags: Java,反序列化,漏洞
 Slug: 
 Authors: bit4

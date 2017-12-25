@@ -1,6 +1,6 @@
 Title: Java反序列化漏洞学习实践三：理解java的动态代理机制
 Date: 2017-12-08 10:20
-Category: 漏洞
+Category: 漏洞实践
 Tags: Java,反序列化,漏洞
 Slug: 
 Authors: bit4
