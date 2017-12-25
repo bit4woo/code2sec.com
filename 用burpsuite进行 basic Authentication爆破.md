@@ -1,6 +1,6 @@
 Title: 用burpsuite进行 basic Authentication爆破
 Date: 2017-12-01 10:20
-Category: 基础知识
+Category: 工具相关
 Tags: basic Authentication, brute force
 Slug: 
 Authors: bit4

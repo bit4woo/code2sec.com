@@ -1,6 +1,6 @@
 Title: 大力出奇迹：Web架构中的安全问题一例
 Date: 2017-08-07 10:20
-Category: 基础知识
+Category: 思路总结
 Tags: web架构,漏洞,基础知识
 Slug: 
 Authors: bit4

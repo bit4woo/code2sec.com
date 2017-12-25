@@ -86,3 +86,23 @@ blog: http://code2sec.com
 
 Email: bit4woo@163.com
 
+
+
+### 0x4、Mind
+
+1. ​
+
+   Q:know it, then hack it …..so, how to know it ? Don’t learn to HACK – Hack to LEARN  ….so, how to hack learn?
+
+   A:
+
+   Creating with coding,Learning by doing,Learning by sharing!
+
+   没有什么完全的准备：在做中学习，边做边学才，为了实现一个目的而学，才是最好的学习之道；在分享中学习，分享会让你更认真对待，分享会带来交流。
+
+2. 思维的维度：宏观和微观；过去、现在和未来。
+
+
+3. 精一而悟道，专注一个领域。
+4. 不要以战术上的勤奋来掩饰战略上的懒惰。
+5. **代码、代码、代码；漏洞、漏洞、漏洞；实践！实践！实践！**

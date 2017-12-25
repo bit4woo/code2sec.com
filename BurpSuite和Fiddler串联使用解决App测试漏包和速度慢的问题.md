@@ -1,6 +1,6 @@
 Title: BurpSuite和Fiddler串联使用解决App测试漏包和速度慢的问题
 Date: 2017-02-09 10:20
-Category: 基础知识
+Category: 工具相关
 Tags: proxy, Burpsuite,fiddler
 Slug: 
 Authors: bit4
