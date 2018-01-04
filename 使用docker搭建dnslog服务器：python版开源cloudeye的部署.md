@@ -1,10 +1,10 @@
-Title:使用docker搭建dnslog服务器
-Date: 2017-12-29 10:20
+Title:使用docker搭建dnslog服务器：python版开源cloudeye的部署
+Date: 2018-01-04 10:20
 Category: 基础知识
 Tags: dnslog,docker
 Slug: 
 Authors: bit4
-Summary: 
+Summary: python版开源cloudeye的部署
 
 
 
@@ -12,7 +12,7 @@ Summary:
 
 https://github.com/BugScanTeam/DNSLog
 
-
+感谢[草粉师傅](https://github.com/coffeehb)的帮助
 
 ### 0x0、域名和配置
 
@@ -21,11 +21,9 @@ https://github.com/BugScanTeam/DNSLog
 1. 一个作为 NS 服务器域名(例:code2sec.com)：在其中设置两条 A 记录指向我们的公网 IP 地址（无需修改DNS服务器，使用运营商默认的就可以了）：
 
 ```
-ns1.code2sec.com  A 记录指向  132.37.11.12
-ns2.code2sec.com  A 记录指向  132.37.11.12
+ns1.code2sec.com  A 记录指向  10.11.12.13
+ns2.code2sec.com  A 记录指向  10.11.12.13
 ```
-
-
 
 2. 一个用于记录域名(例: 0v0.com)：修改 0v0.com 的 NS 记录为 1 中设定的两个域名（无需修改DNS服务器，使用运营商默认的就可以了）：
 
@@ -34,9 +32,9 @@ NS	*.0v0.com	ns1.code2sec.com
 NS	*.0v0.com	ns2.code2sec.com
 ```
 
-不要在里面再设置其他A记录，否则可能有冲突。
+<u>注意：按照dnslog的说明是修改NS记录，但是自己的部署中修改了好几天之后仍然不正常，就转为修改DNS服务器，而后成功了。修改DNS服务器之后就无需在域名管理页面设置任何DNS记录了，因为这部分是在DNSlog的python代码中实现的。</u>
 
-
+![changeNameServer](img/docker+dnslog/changeNameServer.png)
 
 ### 0x1、docker镜像构造
 
@@ -75,7 +73,7 @@ NS1_DOMAIN = 'ns1.code2sec.com'
 NS2_DOMAIN = 'ns2.code2sec.com'
 
 # 服务器外网地址
-SERVER_IP = '132.37.11.12'
+SERVER_IP = '10.11.12.13'
 ```
 
 创建一个dnslog的启动脚本，保存为start.sh：
@@ -89,16 +87,36 @@ python manage.py runserver 0.0.0.0:80 &
 ```
 docker build .
 docker tag e99c409f6585 bit4/dnslog
-docker run -it -p 80:80 bit4/dnslog
+docker run -it -p 80:80 -p 53:53/udp bit4/dnslog
+#注意这个53udp端口，感谢CF_HB师傅的指导
 ./start.sh
 ```
 
 
 
-### 0x2、管理网站
+### 0x2、配置验证
 
-后台地址：http://b.com/admin/  admin admin
+使用nslookup命令进行验证，如果可以直接测试xxx.test.0v0.com了，说明所有配置已经全部生效；如果直接查询失败，而指定了dns服务器为 ns1.code2sec.com查询成功，说明dns服务器配置正确了，但是ns记录的设置需要等待同步或者配置错误。
 
-用户地址：http://admin.b.com/ test 123456
+```
+nslookup
+xxx.test.0v0.com
+server ns1.code2sec.com
+yyy.test.0v0.com
+```
+
+当然，在查询的同时可以登录网页端配合查看，是否收到请求。
+
+在我自己的部署中，发现修改ns记录很久后仍然不能直接查询到 xxx.test.0v0.com，想到NS记录配置和DNS服务器设置都是修改解析的域名的服务器配置，就尝试修改了DNS服务器为 ns1.code2sec.com, 结果就一切正常了。
+
+
+
+### 0x3、管理网站
+
+后台地址：http://0v0.com/admin/  admin admin
+
+用户地址：http://admin.0v0.com/ test 123456
 
 更多详细问题参考项目https://github.com/BugScanTeam/DNSLog
+
+**记得修改默认的账号密码！**
