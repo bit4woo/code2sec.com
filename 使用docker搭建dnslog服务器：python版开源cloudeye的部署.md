@@ -1,6 +1,6 @@
 Title:使用docker搭建dnslog服务器：python版开源cloudeye的部署
 Date: 2018-01-04 10:20
-Category: 基础知识
+Category: 工具相关
 Tags: dnslog,docker
 Slug: 
 Authors: bit4

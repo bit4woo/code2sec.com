@@ -234,7 +234,7 @@ func()
 
   图一
 
-  ![](./img/PickleRCE/Image.png)
+  ![Image](./img/PickleRCE/Image.png)
 
   最终的可以执行任意代码的payload生成器（第一种）,foo()函数中的部分是你应该自己编写替换的代码：
 
