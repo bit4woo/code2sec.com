@@ -41,7 +41,7 @@ DEFAULT_PAGINATION = False
 # RELATIVE_URLS = True
 THEME ='./pelican-themes/bootstrap2-dark'
 
-PLUGIN_PATHS = [u"pelican-plugins"]
+PLUGIN_PATHS = [u"./pelican-plugins"]
 
 PLUGINS = ["sitemap"]
 
@@ -62,8 +62,5 @@ SITEMAP = {
 
 STATIC_PATHS = [u"img"]
 
-FILES_TO_COPY = (
-    ("buil/favicon.ico", "theme/images/favicon.ico"),
-)
 
 GOOGLE_ANALYTICS = 'UA-111997857-1'
