@@ -1,20 +1,20 @@
-Title:项目说明
-Date: 2017-09-22 10:20
+Title:About
+Date: 2222-02-22 22:22
 Category: About
 Tags: About
 Slug: 
 Authors: bit4
-Summary: 
+Summary: 关于我的blog
 
 
 
 ### 项目目的
 
+为了使文章的编写和发布都更简便快捷，也为了更好得备份管理写过的东西，经过摸索，终于找到了一个自己比较满意的模式：
 
+[typora](https://www.typora.io/)(Markdown编辑器)+[github](https://github.com/bit4woo/code2sec.com)(保存备份、共享)+[pelican](http://docs.getpelican.com)(静态网站生成工具) ==》[个人blog](http://www.code2sec.com/)
 
-存储备份个人blog [code2sec.com](http://www.code2sec.com) 的文章、代码、图片、xmind思维导图等各种资源.
-
-也是个人的各种分享内容的一个汇总
+存储备份个人blog的文章、代码、图片、xmind思维导图等各种资源，也是个人的各种分享内容的一个汇总。
 
 
 
