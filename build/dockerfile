@@ -1,0 +1,24 @@
+FROM ubuntu:14.04
+
+RUN apt-get update -y && apt-get install -y python && apt-get install python-pip -y && apt-get install git -y
+RUN pip install pelican markdown
+RUN mkdir blog
+WORKDIR /blog
+RUN git clone https://github.com/bit4woo/code2sec.com
+RUN mv /blog/code2sec.com/build/pelicanconf.py /blog/pelicanconf.py
+
+RUN git clone https://github.com/getpelican/pelican-themes
+WORKDIR /blog/pelican-themes
+RUN git submodule update --init bootstrap2-dark
+
+RUN git clone git://github.com/getpelican/pelican-plugins.git
+
+WORKDIR /blog/
+RUN pelican code2sec.com
+
+RUN mv /blog/code2sec.com/build/favicon.ico /blog/output/theme/images/
+
+WORKDIR /blog/output
+RUN python -m pelican.server
+
+EXPOSE 80
