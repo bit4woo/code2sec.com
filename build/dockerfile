@@ -31,9 +31,9 @@ RUN mkdir output/theme/images -p
 RUN cp /blog/code2sec.com/build/favicon.ico /blog/output/theme/images/
 
 WORKDIR /blog/output
-
-COPY /blog/code2sec.com/build/start.sh start.sh
-CMD ["bash start.sh"]
-
+RUN cp /blog/code2sec.com/build/start.sh start.sh
+RUN chmod +x ./start.sh
+#CMD ["./start.sh"]
+#CMD = exec ; start.sh need linux format?
 
 EXPOSE 80
