@@ -33,7 +33,6 @@ RUN cp /blog/code2sec.com/build/favicon.ico /blog/output/theme/images/
 WORKDIR /blog/output
 RUN cp /blog/code2sec.com/build/start.sh start.sh
 RUN chmod +x ./start.sh
-#CMD ["./start.sh"]
-#CMD = exec ; start.sh need linux format?
+CMD ["./start.sh"]
 
 EXPOSE 80
