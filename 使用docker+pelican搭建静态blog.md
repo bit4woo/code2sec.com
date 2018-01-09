@@ -1,6 +1,6 @@
 Title:使用docker+pelican搭建静态blog
-Date: 2017-09-22 10:20
-Category: 基础知识
+Date: 2018-01-09 10:20
+Category: 工具相关
 Tags: pelican,blog,docker
 Slug: 
 Authors: bit4
@@ -154,14 +154,31 @@ EXPOSE 80
 mkdir blog
 wget https://github.com/bit4woo/code2sec.com/raw/master/build/dockerfile
 docker build .
-docker run -d -it -p 80:80 xxxxx
-docker exec -it xxxxx /bin/bash
+docker tag b18b00c9828c bit4/blog
+docker run -d -it -p 80:80 bit4/blog
+
+#如果服务没有正常启动，可以连接容器检测
+docker exec -it container_ID_or_name /bin/bash
 bash ./start.sh
 ```
 
 
 
-### 0x3、一些注意
+### 0x3、文章更新
+
+当有新的文章发布，先更新到github，然后连接容器进行如下操作
+
+```
+docker exec -it xxxxx /bin/bash
+cd /blog/code2sec.com/
+git pull
+cd ..
+pelican code2sec.com/
+```
+
+
+
+### 0x4、一些注意
 
 关于dockerfile中的cmd和start.sh的一些坑：
 
