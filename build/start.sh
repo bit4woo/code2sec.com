@@ -1,2 +1,2 @@
 #!/bin/bash
-python -m SimpleHTTPServer 80
+python -m pelican.server 80
