@@ -186,6 +186,8 @@ pelican code2sec.com/
 
 2. start.sh必须是Unix格式回车和换行符，而且shell脚本中不能少了`#!/bin/bash`否则会报`standard_init_linux.go:195: exec user process caused "exec format error"`的错误，window下可以通过notepad++来编辑start.sh并且在底部选择Unix的换行回车符。
 
+   ![cmd_sh](img/docker+pelican/cmd_sh.png)
+
 3. start.sh必须要保证“阻塞stdout”,因为“如果没有阻塞住stdout ，docker容器会自动退出”。现象就是容器启动之后又自动退出了，通过log也看不到任何报错。
 
    ```bash
