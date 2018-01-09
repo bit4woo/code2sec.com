@@ -53,13 +53,13 @@ RUN pip install -r requirements.pip
 COPY ./settings.py /DNSLog/dnslog/dnslog/settings.py
 
 COPY ./start.sh /DNSLog/dnslog/start.sh
-RUN chmod a+x start.sh
+RUN chmod +x start.sh
+CMD ["./start.sh"]
 
 EXPOSE 80
-
 ```
 
-下载 `dnslog/dnslog/settings.py`并对如下字段进行对应的修改，保持settings.py：
+下载 `dnslog/dnslog/settings.py`并对如下字段进行对应的修改，保存settings.py：
 
 ```python
 # 做 dns 记录的域名
@@ -79,7 +79,8 @@ SERVER_IP = '10.11.12.13'
 创建一个dnslog的启动脚本，保存为start.sh：
 
 ```bash
-python manage.py runserver 0.0.0.0:80 &
+#!/bin/bash
+python manage.py runserver 0.0.0.0:80
 ```
 
 准备好如上3个文件后，可以构建镜像了
@@ -87,8 +88,10 @@ python manage.py runserver 0.0.0.0:80 &
 ```bash
 docker build .
 docker tag e99c409f6585 bit4/dnslog
-docker run -it -p 80:80 -p 53:53/udp bit4/dnslog
+docker run -d -it -p 80:80 -p 53:53/udp bit4/dnslog
 #注意这个53udp端口，感谢CF_HB师傅的指导
+
+docker exec -it container_ID_or_name /bin/bash
 ./start.sh
 ```
 
