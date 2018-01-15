@@ -154,8 +154,10 @@ EXPOSE 80
 mkdir blog
 wget https://github.com/bit4woo/code2sec.com/raw/master/build/dockerfile
 docker build .
+#docker build . --cache-from
 docker tag b18b00c9828c bit4/blog
 docker run -d -it -p 80:80 bit4/blog
+#可以加上--restart=always 或者 --restart=on-failure在必要时重启
 
 #如果服务没有正常启动，可以连接容器检测
 docker exec -it container_ID_or_name /bin/bash
@@ -166,14 +168,17 @@ bash ./start.sh
 
 ### 0x3、文章更新
 
-当有新的文章发布，先更新到github，然后连接容器进行如下操作
+当有新的文章发布，可以先更新到github，然后连接容器进行操作，但是需要重启pelican server，但是kill掉这个进程将导致容器自动退出（因为没有IO阻塞了）。
+
+所以将更新命令写到start.sh中，在容器启动时自动更新。
 
 ```
-docker exec -it xxxxx /bin/bash
-cd /blog/code2sec.com/
+#!/bin/bash
+cd /blog/code2sec.com
 git pull
 cd ..
-pelican code2sec.com/
+pelican code2sec.com
+python -m pelican.server 80
 ```
 
 
