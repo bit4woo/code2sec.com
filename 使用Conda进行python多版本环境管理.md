@@ -47,7 +47,7 @@ deactivate py3.5
 
 通过对windows系统环境变量的理解：path分为系统path和用户path，path是通过注册表存储的，设置path的方法可以有set、setx、修改注册表
 
-```visual basic
+```
 set 
 #设置只针对当前session有效，如果关闭窗口或者程序，path将恢复为和注册表中一样，是零时的。
 
@@ -69,7 +69,7 @@ reg add /f
 
 由于对bat编程不熟悉，经过一段时间的折腾，选择bat+python的方式实现我们的目标：通过注册表，修改用户path或者系统path，实现用户级别或者系统基本的全局环境遍历切换，从而实现python环境的切换。
 
-```visual basic
+```
 在activate.bat的末尾加入如下内容：
 
 @echo %path% > %~dp0\..\Scripts\tmppath.txt
@@ -127,7 +127,7 @@ changepath(sys.argv[1])
 
 如下脚本保存为[RefreshEnv.cmd](https://github.com/bit4woo/code2sec.com/raw/master/code/conda/RefreshEnv.cmd)，这个脚本来自于https://chocolatey.org/install，是用于刷新修改后的环境变量的。
 
-```visual basic
+```
 @echo off
 ::
 :: RefreshEnv.cmd
