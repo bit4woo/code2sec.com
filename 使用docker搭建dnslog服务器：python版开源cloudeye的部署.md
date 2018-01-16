@@ -8,9 +8,9 @@ Summary: python版开源cloudeye的部署
 
 
 
-本文档主要记录使用docker搭建dnslog的过程。
+本文档主要记录使用docker搭建dnslog的过程。使用如下项目版本，基于[原版](https://github.com/BugScanTeam/DNSLog)做了一些修改：
 
-https://github.com/BugScanTeam/DNSLog
+https://github.com/bit4woo/DNSLog
 
 感谢[草粉师傅](https://github.com/coffeehb)的帮助
 
@@ -46,7 +46,7 @@ FROM ubuntu:14.04
 RUN sed -i 's/archive.ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
 
 RUN apt-get update -y && apt-get install -y python && apt-get install python-pip -y && apt-get install git -y
-RUN git clone https://github.com/BugScanTeam/DNSLog
+RUN git clone https://github.com/bit4woo/DNSLog
 WORKDIR /DNSLog/dnslog
 RUN pip install -r requirements.pip
 
