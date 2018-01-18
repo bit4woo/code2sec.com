@@ -194,7 +194,7 @@ tail -f /var/log/nginx/error.log
 
 3. start.sh必须要保证“阻塞stdout”,因为“如果没有阻塞住stdout ，docker容器会自动退出”。现象就是容器启动之后又自动退出了，通过log也看不到任何报错。
 
-   ```bash
+   ```
    #!/bin/bash
    python -m SimpleHTTPServer 80 &
    #以上的写法就是错误的，&让程序在后台运行，即未阻塞stdout，正确的写法需要去掉&符号。感谢皓烟洎铭师傅的指导。
@@ -206,7 +206,7 @@ tail -f /var/log/nginx/error.log
 
 4. 关于docker启动的错误排查：
 
-   ```bash
+   ```
    docker ps -a
 
    docke logs container_id
