@@ -12,6 +12,11 @@ ENV LANG zh_CN.UTF-8
 ENV LANGUAGE zh_CN:zh
 ENV LC_ALL zh_CN.UTF-8
 
+#install nginx
+RUN yum install -y nginx
+RUN sed -i 's/\/var\/www\/html;/\/blog\/output;/g' /etc/nginx/sites-enabled/default
+RUN service nginx start
+
 RUN apt-get install -y python && apt-get install python-pip -y && apt-get install git -y
 RUN pip install pelican markdown
 RUN mkdir blog
