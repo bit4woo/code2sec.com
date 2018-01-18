@@ -13,7 +13,7 @@ ENV LANGUAGE zh_CN:zh
 ENV LC_ALL zh_CN.UTF-8
 
 #install nginx
-RUN yum install -y nginx
+RUN apt-get install -y nginx
 RUN sed -i 's/\/var\/www\/html;/\/blog\/output;/g' /etc/nginx/sites-enabled/default
 RUN service nginx start
 
