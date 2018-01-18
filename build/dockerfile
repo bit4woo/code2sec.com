@@ -12,7 +12,7 @@ ENV LANG zh_CN.UTF-8
 ENV LANGUAGE zh_CN:zh
 ENV LC_ALL zh_CN.UTF-8
 
-#install nginx
+#install nginx and config web root path
 RUN apt-get install -y nginx
 RUN sed -i 's/\/var\/www\/html;/\/blog\/output;/g' /etc/nginx/sites-enabled/default
 RUN service nginx start
@@ -24,10 +24,13 @@ WORKDIR /blog
 RUN git clone https://github.com/bit4woo/code2sec.com
 RUN cp /blog/code2sec.com/build/pelicanconf.py /blog/pelicanconf.py
 
+
+#themes，I use bootstrap2-dark
 RUN git clone https://github.com/getpelican/pelican-themes
 WORKDIR /blog/pelican-themes
 #RUN git submodule update --init bootstrap2-dark
 
+#sitemap plugin
 WORKDIR /blog
 RUN git clone git://github.com/getpelican/pelican-plugins.git
 RUN pelican code2sec.com

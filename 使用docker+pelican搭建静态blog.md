@@ -104,7 +104,6 @@ RUN sed -i 's/archive.ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
 RUN apt-get update -y 
 
 #resolve chinese coding issue
-#以下部分是为了解决中文编码的问题
 RUN apt-get install -y locales locales-all
 RUN locale-gen zh_CN.UTF-8 &&\
   DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
@@ -113,31 +112,32 @@ ENV LANG zh_CN.UTF-8
 ENV LANGUAGE zh_CN:zh
 ENV LC_ALL zh_CN.UTF-8
 
-#pelican和其依赖的安装
+#install nginx and config web root path
+RUN apt-get install -y nginx
+RUN sed -i 's/\/var\/www\/html;/\/blog\/output;/g' /etc/nginx/sites-enabled/default
+RUN service nginx start
+
 RUN apt-get install -y python && apt-get install python-pip -y && apt-get install git -y
 RUN pip install pelican markdown
-
-#创建blog目录（项目），并且从github上克隆静态文件，将写好的pelicanconf.py配置文件进行替换。
 RUN mkdir blog
 WORKDIR /blog
 RUN git clone https://github.com/bit4woo/code2sec.com
 RUN cp /blog/code2sec.com/build/pelicanconf.py /blog/pelicanconf.py
 
-#下载pelican的主题，我需要的是bootstrap2-dark
+
+#themes，I use bootstrap2-dark
 RUN git clone https://github.com/getpelican/pelican-themes
 WORKDIR /blog/pelican-themes
 #RUN git submodule update --init bootstrap2-dark
 
-#下载pelican的插件，我需要的是给blog增加一个sitemap的插件
+#sitemap plugin
 WORKDIR /blog
 RUN git clone git://github.com/getpelican/pelican-plugins.git
 RUN pelican code2sec.com
 
-#处理favicon.ico
 RUN mkdir output/theme/images -p
 RUN cp /blog/code2sec.com/build/favicon.ico /blog/output/theme/images/
 
-#设置启动脚本
 WORKDIR /blog/output
 RUN cp /blog/code2sec.com/build/start.sh start.sh
 RUN chmod +x ./start.sh
@@ -146,9 +146,13 @@ CMD ["./start.sh"]
 EXPOSE 80
 ```
 
+之前用SimpleHTTPServer、pelican.server做web容器，但是这2个服务都不够强大，容易假死。所以现在改成了nginx
+
 
 
 ### 0x2、快速部署
+
+在Linux服务上快速部署的操作命令大致如下：
 
 ```bash
 mkdir blog
@@ -164,24 +168,19 @@ docker exec -it container_ID_or_name /bin/bash
 bash ./start.sh
 ```
 
-
-
 ### 0x3、文章更新
 
-当有新的文章发布，可以先更新到github，然后连接容器进行操作，但是需要重启pelican server，但是kill掉这个进程将导致容器自动退出（因为没有IO阻塞了）。
+[start.sh](https://github.com/bit4woo/code2sec.com/blob/master/build/start.sh)的内容如下，主要保证每次启动docker时都从github拉取最新的内容，`tail -f /var/log/nginx/error.log`的目的是为了保证一个前台进程阻塞IO，避免docker自动退出
 
-所以将更新命令写到start.sh中，在容器启动时自动更新。
-
-```
+```bash
 #!/bin/bash
 cd /blog/code2sec.com
 git pull
 cd ..
 pelican code2sec.com
-python -m pelican.server 80
+service nginx start
+tail -f /var/log/nginx/error.log
 ```
-
-
 
 ### 0x4、一些注意
 
@@ -209,6 +208,7 @@ python -m pelican.server 80
 
    ```bash
    docker ps -a
+
    docke logs container_id
    ```
 
@@ -230,6 +230,7 @@ python -m SimpleHTTPServer 80 &
 
 #退出容器时，进程不会结束，将继续运行。在交互模式中应该这样使用。
 nohup python -m SimpleHTTPServer 80 &
+nohup tail -f /var/log/nginx/error.log &
 ```
 
 
