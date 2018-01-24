@@ -186,19 +186,15 @@ tail -f /var/log/nginx/error.log
 
 关于dockerfile中的cmd和start.sh的一些坑：
 
-1. `CMD  ["echo","hello world"]`这种格式（也就是字符串数组的格式）的实质是通过exec执行的，`CMD echo hello word` 这种格式的实质是 /bin/sh -c "echo hello world"执行的。
+- `CMD  ["echo","hello world"]`这种格式（也就是字符串数组的格式）的实质是通过exec执行的，`CMD echo hello word` 这种格式的实质是 /bin/sh -c "echo hello world"执行的。
 
-2. start.sh必须是Unix格式回车和换行符，而且shell脚本中不能少了`#!/bin/bash`否则会报`standard_init_linux.go:195: exec user process caused "exec format error"`的错误，window下可以通过notepad++来编辑start.sh并且在底部选择Unix的换行回车符。
+- start.sh必须是Unix格式回车和换行符，而且shell脚本中不能少了`#!/bin/bash`否则会报`standard_init_linux.go:195: exec user process caused "exec format error"`的错误，window下可以通过notepad++来编辑start.sh并且在底部选择Unix的换行回车符。
 
    ![cmd_sh](img/docker+pelican/cmd_sh.png)
 
-3. **启动时的自动退出**----“如果没有阻塞住stdout ，docker容器会自动退出”。
+- **启动时的自动退出**----“如果没有阻塞住stdout ，docker容器会自动退出”。启动时的自动退出的现象就是：docker run没有报错；docker ps -a 看到的状态是Exited (0)，即正常退出；通过docker logs xxx也看不到任何错误信息。
 
-   启动时的自动退出的现象就是：docker run没有报错；docker ps -a 看到的状态是Exited (0)，即正常退出；通过docker logs xxx也看不到任何错误信息。
-
-   遇到这种情况有2种解决思路：
-
-   一是修改start.sh 增加阻塞stdout的命令比如
+   遇到这种情况有2种解决思路：一是修改start.sh 增加阻塞stdout的命令比如
 
 ```bash
 #!/bin/bash
@@ -212,26 +208,18 @@ python -m SimpleHTTPServer 80
 nohup python -m SimpleHTTPServer 80
 #即以上2中方法都是可以的，不能少了“#!/bin/bash”
 ```
-
-二是在docker run的时候，加上 -it参数和命令/bin/bash。比如 `docker run -d -it bit4/test /bin/bash`
-
-加/bin/bash的作用是，在容器启动的时候运行启动一个bash，而 -it参数是在该bash下 开启标准输入和分配一个伪tty，这就相当于阻塞stdout了。（这就是为什么基础的ubuntu镜像可以正常运行而不自动退出的原因！）
+二是在docker run的时候，加上 -it参数和命令/bin/bash。比如 `docker run -d -it bit4/test /bin/bash`。加/bin/bash的作用是，在容器启动的时候运行启动一个bash，而 -it参数是在该bash下 开启标准输入和分配一个伪tty，这就相当于阻塞stdout了。（这就是为什么基础的ubuntu镜像可以正常运行而不自动退出的原因！）
 
 ```
  -i, --interactive                           Keep STDIN open even if not attached
  -t, --tty                                   Allocate a pseudo-TTY#分配一个伪tty
 ```
 
-4. **交互时的自动退出**  
+- **交互时的自动退出**  
 
-   如果是`docker run -d -it bit4/test /bin/bash 然后docker exec -it container_id_or_name /bin/bash`的方式进入交互模式（会有2个bash），在其中执行了杀死相关的阻塞stdout的进程，也会立即导致容器的退出关闭；
-
-   如果是`docker run -it bit4/test /bin/bash`直接入交互模式（只有一个bash），退出容器的同时容器将自动关闭，即使是加了&符合让命令在后台执行。
-
-   有2个方式解决：
-
-   1. 不退出容器，直接关闭宿主机的shell（SSH远程链接）
-   2. 使用nohup + cmd +& 的格式来运行命令来阻塞stdout，然后退出容器（推荐使用这种方式）。
+如果是`docker run -d -it bit4/test /bin/bash 然后docker exec -it container_id_or_name /bin/bash`的方式进入交互模式（会有2个bash），在其中执行了杀死相关的阻塞stdout的进程，也会立即导致容器的退出关闭；如果是`docker run -it bit4/test /bin/bash`直接入交互模式（只有一个bash），退出容器的同时容器将自动关闭，即使是加了&符合让命令在后台执行。有2个方式解决：
+1.不退出容器，直接关闭宿主机的shell（SSH远程链接）
+2.使用nohup + cmd +& 的格式来运行命令来阻塞stdout，然后退出容器（推荐使用这种方式）。
 
 ```bash
 #在容器的交互模式中执行以下命令：
@@ -243,13 +231,16 @@ nohup python -m SimpleHTTPServer 80 &
 nohup tail -f /var/log/nginx/error.log &
 ```
 
-5. docker启动失败的排查方法：
+- docker启动失败的排查方法：
 
 ```bash
 docker ps -a
 
 docke logs container_id
 #查看启动识别的错误信息
+
+service docker restart
+#另外，如果新安装的docker遇到端口不通，端口映射失败等问题，重启一下服务吧，遇到好几次了。
 ```
 
 
