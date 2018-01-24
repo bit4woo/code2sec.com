@@ -46,7 +46,7 @@ weather: sunny
 
 然后在同一目录下运行如下python 代码：
 
-```
+```python
 # !/usr/bin/env python
 # -*- coding:utf-8 -*-
 __author__ = 'bit4'
@@ -80,7 +80,7 @@ print(yaml.load(file('sample.yml', 'r')))
 
 通过如下代码，来序列化test类中的内容，
 
-```
+```python
 # !/usr/bin/env python
 # -*- coding:utf-8 -*-
 __author__ = 'bit4'
@@ -108,7 +108,7 @@ fp.write(payload)
 
 再运行yaml_verify.py来验证：
 
-```
+```python
 # !/usr/bin/env python
 # -*- coding:utf-8 -*-
 __author__ = 'bit4'
