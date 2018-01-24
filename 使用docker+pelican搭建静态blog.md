@@ -182,7 +182,7 @@ service nginx start
 tail -f /var/log/nginx/error.log
 ```
 
-### 0x4、一些注意
+### 0x4、关于docker的一些注意点
 
 关于dockerfile中的cmd和start.sh的一些坑：
 
@@ -192,36 +192,46 @@ tail -f /var/log/nginx/error.log
 
    ![cmd_sh](img/docker+pelican/cmd_sh.png)
 
-3. start.sh必须要保证“阻塞stdout”,因为“如果没有阻塞住stdout ，docker容器会自动退出”。现象就是容器启动之后又自动退出了，通过log也看不到任何报错。
+3. **启动时的自动退出**----“如果没有阻塞住stdout ，docker容器会自动退出”。
 
-   ```
-   #!/bin/bash
-   python -m SimpleHTTPServer 80 &
-   #以上的写法就是错误的，&让程序在后台运行，即未阻塞stdout，正确的写法需要去掉&符号。感谢皓烟洎铭师傅的指导。
+   启动时的自动退出的现象就是：docker run没有报错；docker ps -a 看到的状态是Exited (0)，即正常退出；通过docker logs xxx也看不到任何错误信息。
 
-   python -m SimpleHTTPServer 80
-   nohup python -m SimpleHTTPServer 80
-   #即以上2中方法都是可以的，不能少了“#!/bin/bash”
-   ```
+   遇到这种情况有2种解决思路：
 
-4. 关于docker启动的错误排查：
+   一是修改start.sh 增加阻塞stdout的命令比如
 
-   ```
-   docker ps -a
+```bash
+#!/bin/bash
+python -m SimpleHTTPServer 80 &
+#以上的写法就是错误的，&让程序在后台运行，即未阻塞stdout，正确的写法需要去掉&符号。感谢皓烟洎铭师傅的指导。
 
-   docke logs container_id
-   ```
+#!/bin/bash
+python -m SimpleHTTPServer 80
 
-   ​
+#!/bin/bash
+nohup python -m SimpleHTTPServer 80
+#即以上2中方法都是可以的，不能少了“#!/bin/bash”
+```
 
-关于shell退出时进程终止：
+二是在docker run的时候，加上 -it参数和命令/bin/bash。比如 `docker run -d -it bit4/test /bin/bash`
 
-通过交互模式在docker容器中执行的命令，如果退出容器命令也会终止，即使是加了&符合让命令在后台执行。
+加/bin/bash的作用是，在容器启动的时候运行启动一个bash，而 -it参数是在该bash下 开启标准输入和分配一个伪tty，这就相当于阻塞stdout了。（这就是为什么基础的ubuntu镜像可以正常运行而不自动退出的原因！）
 
-有2个方式解决：
+```
+ -i, --interactive                           Keep STDIN open even if not attached
+ -t, --tty                                   Allocate a pseudo-TTY#分配一个伪tty
+```
 
-1. 不退出容器，直接关闭宿主机的shell（SSH远程链接）
-2. 使用nohup + cmd +& 的格式来运行命令，然后退出容器（推荐使用这种方式）。
+4. **交互时的自动退出**  
+
+   如果是`docker run -d -it bit4/test /bin/bash 然后docker exec -it container_id_or_name /bin/bash`的方式进入交互模式（会有2个bash），在其中执行了杀死相关的阻塞stdout的进程，也会立即导致容器的退出关闭；
+
+   如果是`docker run -it bit4/test /bin/bash`直接入交互模式（只有一个bash），退出容器的同时容器将自动关闭，即使是加了&符合让命令在后台执行。
+
+   有2个方式解决：
+
+   1. 不退出容器，直接关闭宿主机的shell（SSH远程链接）
+   2. 使用nohup + cmd +& 的格式来运行命令来阻塞stdout，然后退出容器（推荐使用这种方式）。
 
 ```bash
 #在容器的交互模式中执行以下命令：
@@ -231,6 +241,15 @@ python -m SimpleHTTPServer 80 &
 #退出容器时，进程不会结束，将继续运行。在交互模式中应该这样使用。
 nohup python -m SimpleHTTPServer 80 &
 nohup tail -f /var/log/nginx/error.log &
+```
+
+5. docker启动失败的排查方法：
+
+```bash
+docker ps -a
+
+docke logs container_id
+#查看启动识别的错误信息
 ```
 
 
