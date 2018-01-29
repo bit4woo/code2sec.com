@@ -1,6 +1,6 @@
-Title:http.server和web.py的URL跳转漏洞实践
+Title:python http.server和web.py的URL跳转漏洞实践
 Date: 2018-01-20 10:20
-Category: 漏洞实践
+Category: python安全
 Tags: python安全,URL redirect
 Slug: 
 Authors: bit4
