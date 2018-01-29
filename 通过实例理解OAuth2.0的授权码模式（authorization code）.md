@@ -46,7 +46,7 @@ Summary:
 
 ### 0x1、可能的安全问题
 
-1. 第二步中，可能通过修改redirect_uri实现任意url跳转，从而实现token的窃取。client_id和redirect_uri都应该是在开发者平台注册的时候确定，并绑定关系的 。如果注册的时候就通过通配符来填充子域名，将可能造成这个问题
+- 第二步中，可能通过修改redirect_uri实现任意url跳转，从而实现token的窃取。client_id和redirect_uri都应该是在开发者平台注册的时候确定，并绑定关系的 。如果注册的时候就通过通配符来填充子域名，将可能造成这个问题
 
 ```
 2010-11-03 WooYun: Sina 微博OAuth 提供者存在session fixation attack漏洞
@@ -61,11 +61,11 @@ Summary:
 
 
 
-2. client_id（appkey）和client_secret（app secret）泄露
+- client_id（appkey）和client_secret（app secret）泄露
 
-3. 平台方提供的接口存在XSS
+- 平台方提供的接口存在XSS
 
-4. 平台方授权页面的csrf
+- 平台方授权页面的csrf
 
 ```
 2012-02-15 WooYun: CSRF导致微博应用自动授权
@@ -73,7 +73,7 @@ Summary:
 2012-12-03 WooYun: 网易开放平台第三方应用oauth强制用户授权漏洞
 ```
 
-5. 流程漏洞，可忽略前面步骤，类似密码重置逻辑漏洞，UID修改
+- 流程漏洞，可忽略前面步骤，类似密码重置逻辑漏洞，UID修改
 
 ```
 2013-02-19 WooYun: 猪八戒网不用账号密码登录任意账号
@@ -82,7 +82,7 @@ http://www.wooyun.org/bugs/wooyun-2013-018898
 http://www.wooyun.org/bugs/wooyun-2013-020258
 ```
 
-6. 使用了Oauth后导致的跨应用登录问题（OAuth 2.0无绑定token问题）
+- 使用了Oauth后导致的跨应用登录问题（OAuth 2.0无绑定token问题）
 
   通过一系列，登录授权后，获取到一个代表用户身份的code--access_token--或者UID. 如果能找到这个参数的规律，能进行修改或者替换，那么将导致任意用户登录。
 
@@ -99,4 +99,4 @@ http://www.wooyun.org/bugs/wooyun-2012-011104
 ```
 
 ### 0x2、参考
-https://github.com/bit4woo/code2sec.com/refrence/OAuth2.0
+[https://github.com/bit4woo/code2sec.com/tree/master/refrence/OAuth2.0](https://github.com/bit4woo/code2sec.com/tree/master/refrence/OAuth2.0)
