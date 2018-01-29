@@ -62,30 +62,41 @@ Summary:
 
 
 2. client_id（appkey）和client_secret（app secret）泄露
+
 3. 平台方提供的接口存在XSS
+
 4. 平台方授权页面的csrf
 
-  2012-02-15 WooYun: CSRF导致微博应用自动授权
-  2012-07-20 WooYun: 第三方APP强制新浪用户OAUTH授权漏洞
-  2012-12-03 WooYun: 网易开放平台第三方应用oauth强制用户授权漏洞
+```
+2012-02-15 WooYun: CSRF导致微博应用自动授权
+2012-07-20 WooYun: 第三方APP强制新浪用户OAUTH授权漏洞
+2012-12-03 WooYun: 网易开放平台第三方应用oauth强制用户授权漏洞
+```
+
 5. 流程漏洞，可忽略前面步骤，类似密码重置逻辑漏洞，UID修改
 
-  2013-02-19 WooYun: 猪八戒网不用账号密码登录任意账号
-  	http://www.wooyun.org/bugs/wooyun-2013-018898
-  2013-03-18 WooYun: 饭统网登录任意账户漏洞
-  	http://www.wooyun.org/bugs/wooyun-2013-020258
+```
+2013-02-19 WooYun: 猪八戒网不用账号密码登录任意账号
+http://www.wooyun.org/bugs/wooyun-2013-018898
+2013-03-18 WooYun: 饭统网登录任意账户漏洞
+http://www.wooyun.org/bugs/wooyun-2013-020258
+```
+
 6. 使用了Oauth后导致的跨应用登录问题（OAuth 2.0无绑定token问题）
 
   通过一系列，登录授权后，获取到一个代表用户身份的code--access_token--或者UID. 如果能找到这个参数的规律，能进行修改或者替换，那么将导致任意用户登录。
-  WooYun: 金山快盘手机客户端任意进入他人快盘账号
-  	http://www.wooyun.org/bugs/wooyun-2013-017543
-  	金山快盘手机客户端任意进入他人快盘账号.pdf
-  WooYun: 啪啪任意进入他人账号（OAuth 2.0无绑定token问题）
-  	http://www.wooyun.org/bugs/wooyun-2013-017306
-  	啪啪任意进入他人账号（OAuth 2.0无绑定token问题）.pdf
-   WooYun: 淘网址sina oauth认证登录漏洞
-  	http://www.wooyun.org/bugs/wooyun-2012-011104
-  	淘网址sina oauth认证登录漏洞.pdf
-### 0x2、参考
 
+```
+WooYun: 金山快盘手机客户端任意进入他人快盘账号
+http://www.wooyun.org/bugs/wooyun-2013-017543
+金山快盘手机客户端任意进入他人快盘账号.pdf
+WooYun: 啪啪任意进入他人账号（OAuth 2.0无绑定token问题）
+http://www.wooyun.org/bugs/wooyun-2013-017306
+啪啪任意进入他人账号（OAuth 2.0无绑定token问题）.pdf
+WooYun: 淘网址sina oauth认证登录漏洞
+http://www.wooyun.org/bugs/wooyun-2012-011104
+淘网址sina oauth认证登录漏洞.pdf
+```
+
+### 0x2、参考
 https://github.com/bit4woo/code2sec.com/refrence/OAuth2.0
