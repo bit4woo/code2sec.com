@@ -35,7 +35,7 @@ LINKS = (('re4lity', 'http://rinige.com/'),
 SOCIAL = (('github', 'https://github.com/bit4woo'),
           ('email', 'mailto:bit4woo@163.com'),)
 
-DEFAULT_PAGINATION = True
+DEFAULT_PAGINATION = False
 
 # Uncomment following line if you want document-relative URLs when developing
 # RELATIVE_URLS = True
