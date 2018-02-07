@@ -66,7 +66,7 @@ print template
 print template.format(user="bit4")
 ```
 
-![%s字符串拼接](img/format_string_vuln/%s字符串拼接.png)
+![%s字符串拼接](img/format_string_vuln/s字符串拼接.png)
 
 
 
