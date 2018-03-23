@@ -201,3 +201,39 @@ goto main
 ![global_switch_useage](img/conda/global_switch_useage.png)
 
 终于可以在命令行下愉快得切换各种python环境了！
+
+
+
+### 0x4、总结
+
+1. 从[这里](https://conda.io/miniconda.html)下载
+
+2. 找到activate.bat 并编辑 （C:\ProgramData\Miniconda2\Scripts\activate.bat ），末尾加入如下内容：
+
+```
+@echo %path% > %~dp0\..\Scripts\tmppath.txt
+@start python %~dp0\..\Scripts\global_switch.py %~dp0\..\Scripts\tmppath.txt
+@call %~dp0\..\Scripts\RefreshEnv.cmd
+```
+
+3. 将[global_switch.py](https://github.com/bit4woo/code2sec.com/raw/master/code\conda\global_switch.py) 和 [RefreshEnv.cmd](https://github.com/bit4woo/code2sec.com/raw/master/code/conda/RefreshEnv.cmd) 保存到相同目录
+
+4. 将conda.exe加入到path环境变量中（C:\ProgramData\Miniconda2\Scripts）
+
+5. 使用方法
+
+```
+conda env list
+#查看有哪些虚拟环境
+
+conda list
+#查看当前虚拟环境中安装了得python的包
+
+conda create -n py3.5 python=3.5
+#创建一个虚拟环境，-n是项目的名称（name）,后面是python的版本要求
+
+activate py3.5
+
+deactivate py3.5
+```
+
