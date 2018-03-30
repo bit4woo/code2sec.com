@@ -206,19 +206,24 @@ goto main
 
 ### 0x4、总结
 
-1. 从[这里](https://conda.io/miniconda.html)下载
+1. 从[这里](https://conda.io/miniconda.html)下载并安装（可以选择将conda.exe添加到环境变量中）
+
+```
+start /wait "" Miniconda2-latest-Windows-x86_64.exe /InstallationType=AllUsers /AddToPath=1 /RegisterPython=0 /S /D=C:\ProgramData\Miniconda2
+#AddToPath 将conda 加到path中，可以直接在cmd中运行
+#RegisterPython 将python路径加到path中，0代表添加到当前用户的path，1代表添加到系统的path--对所有用户起效。
+#因为全局切换的实质就是配置环境变量，为了避免影响，这里这两个选项都不启用
+```
 
 2. 找到activate.bat 并编辑 （C:\ProgramData\Miniconda2\Scripts\activate.bat ），末尾加入如下内容：
 
 ```
 @echo %path% > %~dp0\..\Scripts\tmppath.txt
-@start python %~dp0\..\Scripts\global_switch.py %~dp0\..\Scripts\tmppath.txt
+@start %~dp0\..\python %~dp0\..\Scripts\global_switch.py %~dp0\..\Scripts\tmppath.txt
 @call %~dp0\..\Scripts\RefreshEnv.cmd
 ```
 
 3. 将[global_switch.py](https://github.com/bit4woo/code2sec.com/raw/master/code\conda\global_switch.py) 和 [RefreshEnv.cmd](https://github.com/bit4woo/code2sec.com/raw/master/code/conda/RefreshEnv.cmd) 保存到相同目录
-
-4. 将conda.exe加入到path环境变量中（C:\ProgramData\Miniconda2\Scripts）
 
 5. 使用方法
 
