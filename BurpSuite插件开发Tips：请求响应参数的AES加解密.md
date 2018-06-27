@@ -14,6 +14,8 @@ Summary:
 
 具体bug请移步：[Zealer_android客户端安全检测(从脱壳到burp自动加解密插件案例/SQL注入/逻辑漏洞/附AES加解密脚本POC)](http://www.2cto.com/article/201607/528201.html)
 
+或者看这里：https://github.com/bit4woo/code2sec.com/tree/master/img/BurpExtenderAES/Zealer_android.png
+
 ## 代码
 
 闲话少说，上代码，BurpExtender主类代码如下，进行了较为详细的注释。AES算法类的参考链接：
