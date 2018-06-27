@@ -44,29 +44,11 @@ web架构中的安全问题 [大图](https://github.com/bit4woo/code2sec.com/raw
 
 ### 0x2、安全工具
 
-
-
-**【reCAPTCHA】一款识别图形验证码的Burp Suite插件**
-
-简介：一个burp插件，自动识别图形验证码，并用于Intruder中的Payload。
-
-下载：<https://github.com/bit4woo/reCAPTCHA>
-
-
-
 **【passmaker】根据定制规则生成密码字典**
 
 简介：该脚本的主要目标是根据定制的规则来组合生成出密码字典，主要目标是针对企业，希望对安全人员自查“符合密码策略的弱密码”有所帮助。
 
 下载：<https://github.com/bit4woo/passmaker>
-
-
-
-**【Domain Hunter】利用BurpSuite Spider收集子域名和相似域名的插件**
-
-简介：插件的主要原理就是从BurpSuite的Sitemap中搜索出子域名和相似域名。也可以对已经发现的子域名进行主动爬取，以发现更多的相关域名，这个动作可以自己重复递归下去，直到没有新的域名发现为止。
-
-下载：<https://github.com/bit4woo/domain_hunter>
 
 
 
@@ -78,7 +60,49 @@ web架构中的安全问题 [大图](https://github.com/bit4woo/code2sec.com/raw
 
 
 
-### 0x3、关于我
+### 0x3、burp插件
+
+**【reCAPTCHA】一款识别图形验证码的Burp Suite插件**
+
+简介：一个burp插件，自动识别图形验证码，并用于Intruder中的Payload。
+
+下载：<https://github.com/bit4woo/reCAPTCHA>
+
+
+
+**【Domain Hunter】利用BurpSuite Spider收集子域名和相似域名的插件**
+
+简介：插件的主要原理就是从BurpSuite的Sitemap中搜索出子域名和相似域名。也可以对已经发现的子域名进行主动爬取，以发现更多的相关域名，这个动作可以自己重复递归下去，直到没有新的域名发现为止。
+
+下载：<https://github.com/bit4woo/domain_hunter>
+
+
+
+**【knife】一个将有用的小功能加入到右键菜单的burp suite插件**
+
+简介：目前有四个菜单：
+
+1. copy this cookie
+
+   尝试复制当前请求中的cookie值到剪贴板，如果当前请求没有cookie值，将不做操作。
+
+2. get lastest cookie
+
+   从proxy history中获取与当前域的最新cookie值。个人觉得这个很有有用，特别是当repeater等请求中的cookie过期，而又需要重放复现时。感谢cf_hb师傅的idea。
+
+3. add host to scope
+
+   将当前请求的host添加到burp的scope中，我们常常需要的时将整个网站加到scope而不是一个具体的URL。
+
+4. U2C
+
+   尝试对选中的内容进行【Unicode转中文的操作】，只有当选中的内容时response是才会显示该菜单。
+
+下载：https://github.com/bit4woo/knife
+
+
+
+### 0x4、关于我
 
 github: https://github.com/bit4woo
 
@@ -88,7 +112,7 @@ Email: bit4woo@163.com
 
 
 
-### 0x4、Mind
+### 0x5、Mind
 
 1. ​
 
@@ -105,4 +129,4 @@ Email: bit4woo@163.com
 
 3. 精一而悟道，专注一个领域。
 4. 不要以战术上的勤奋来掩饰战略上的懒惰。
-5. **代码、代码、代码；漏洞、漏洞、漏洞；实践！实践！实践！**
+5. **<u>代码、代码、代码；漏洞、漏洞、漏洞；实践！实践！实践！</u>**
