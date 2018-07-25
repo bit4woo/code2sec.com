@@ -33,15 +33,13 @@ Summary:
 
 ![img](img/JavaDeserStep2/1.png)
 
-![img](file:///C:/Users/Jax/AppData/Local/Temp/enhtmlclip/Image(2).png)
-
  
 
 ### 0x1、通过反射方法调用函数
 
  
 
-该demo主要实践主要学习使用反射方法来调用类中的函数。
+该demo主要实践学习使用反射方法来调用类中的函数。
 
  
 
@@ -224,13 +222,42 @@ class operation {
 
 2.在重写的readObject()方法的逻辑中有 method.invoke函数出现，而且参数可控。
 
- 
+
 
 *再稍作抽象：*
 
-1.有一个可序列化的类，并且该类是重写了readObject()方法的。（主线流程，反序列化漏洞都是这个主线逻辑流程）
+1.有一个可序列化的类，并且该类是重写了readObject()方法的，除了默认的对象读取外，还有其他处理逻辑。（主线流程，反序列化漏洞都是这个主线逻辑流程，这是反序列化漏洞的入口点。）
 
 2..在重写的readObject()方法的逻辑中有 直接或间接使用类似method.invoke这种可以执行调用任意方法的函数，而且参数可控。（是否还有其他函数可以达到相同的目的呢？）
+
+
+
+ Apache Commons Collections 3.x 版本的 Gadget 构造过程 就是典型的例子。它的调用链如下：
+
+```
+/*
+    Gadget chain:
+        ObjectInputStream.readObject()
+            AnnotationInvocationHandler.readObject()
+                AbstractInputCheckedMapDecorator$MapEntry.setValue()
+                    TransformedMap.checkSetValue()
+                        ConstantTransformer.transform()
+                        InvokerTransformer.transform()
+                            Method.invoke()
+                                Class.getMethod()
+                        InvokerTransformer.transform()
+                            Method.invoke()
+                                Runtime.getRuntime()
+                        InvokerTransformer.transform()
+                            Method.invoke()
+                                Runtime.exec()
+ 
+    Requires:
+        commons-collections <= 3.2.1
+*/
+```
+
+
 
 
 
@@ -249,3 +276,5 @@ class operation {
 <http://blog.csdn.net/zjf280441589/article/details/50453776>
 
 <http://ifeve.com/java-reflection/>
+
+Apache Commons Collections 3.x 版本的 Gadget调用链： http://blog.knownsec.com/2015/12/untrusted-deserialization-exploit-with-java/

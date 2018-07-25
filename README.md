@@ -102,6 +102,14 @@ web架构中的安全问题 [大图](https://github.com/bit4woo/code2sec.com/raw
 
 
 
+【U2C】贼好用的Unicode转中文插件
+
+完全重写，使用新的tab来展示转码后的响应数据包，不影响原始的响应数据包，更加简洁实用！ 
+
+下载：https://github.com/bit4woo/u2c
+
+
+
 ### 0x4、关于我
 
 github: https://github.com/bit4woo
