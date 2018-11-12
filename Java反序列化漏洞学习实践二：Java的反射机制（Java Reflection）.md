@@ -169,18 +169,21 @@ import java.lang.reflect.Method;
 
 /*
  * 有了反射方法的基础，再结合step1，实现一个基于反射方法的弹计算器。
+ * 在实现了Serializable的类中， 通过重写readObject方法来实现
  */
 
 public class reflectionTest2 implements Serializable{
-	private Integer n;  
+
+	private Integer age;
+	private String name;
+	
+    public reflectionTest2() {}
+	
+    public reflectionTest2(String name,Integer age){ //构造函数，初始化时执行
+    	this.age = age;
+    	this.name = name;
+    }
     
-    public reflectionTest2(Integer n){ //构造函数，初始化时执行
-    	this.n = n;
-    }
-    public String int2string(Integer n) {
-    	System.out.println("here");
-    	return Integer.toString(n);
-    }
     private void readObject(java.io.ObjectInputStream in) throws IOException,ClassNotFoundException{
     	in.defaultReadObject();//调用原始的readOject方法
     	
@@ -191,11 +194,11 @@ public class reflectionTest2 implements Serializable{
     	catch(Exception e) {
     		e.printStackTrace();
     	}
-    	}
+    }
 	
 	public static void main(String[] args){
-		//reflectionTest2 x= new reflectionTest2(2);
-		//operation.ser(x);
+		reflectionTest2 x= new reflectionTest2();
+		operation.ser(x);
 		operation.deser();
 	}
 }
@@ -229,10 +232,8 @@ class operation {
 			System.out.print(x);
 			ois.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -241,7 +242,7 @@ class operation {
 
 执行结果：
 
-![img](img/JavaDeserStep2/2.png)
+![img](img/JavaDeserStep2/2.1.png)
 
 ### 0x3、通过setAccessible访问私有属性和函数
 
