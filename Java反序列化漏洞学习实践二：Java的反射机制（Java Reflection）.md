@@ -54,17 +54,19 @@ public class reflectionTest {
 		try {
 
 			//Class获取类的方法一:实例对象的getClass()方法;
-			test testObject = new test(111);
+			User testObject = new User("zhangshan",19);
 			Class Method1Class = testObject.getClass();
 			
 			//Class获取类的方法二:类的.class(最安全/性能最好)属性;有点类似python的getattr()。java中每个类型都有class 属性.
-			Class Method2Class = test.class;
+			Class Method2Class = User.class;
 			
 			//Class对象的获取方法三:运用Class.forName(String className)动态加载类,className需要是类的全限定名(最常用).
-            //这种方法也最容易理解，通过类名(jar包中的完整namespace)就可以调用其中的方法，也最符合我们需要的使用场景.
-            //j2eeScan burp 插件就使用了这种反射机制。
-			String path = "Step2.test"; 
+			//这种方法也最容易理解，通过类名(jar包中的完整namespace)就可以调用其中的方法，也最符合我们需要的使用场景.
+			//j2eeScan burp 插件就使用了这种反射机制。
+			String path = "Step2.User"; 
 			Class Method3Class = Class.forName(path);
+			
+			
 			
 			Method[] methods = Method3Class.getMethods();
 			//Method[] methods = Method2Class.getMethods();
@@ -79,21 +81,22 @@ public class reflectionTest {
 			 * 知道了它的方法和属性，就可以调用这些方法和属性。
 			 */
 			
-			//调用test类中的方法
+			//调用User类中的方法
 			
 			for(Method method : methods){
-			    if(method.getName().equals("int2string")) {
+			    if(method.getName().equals("getName")) {
 			    	System.out.println("method = " + method.getName());
 			    	
 			    	Class[] parameterTypes = method.getParameterTypes();//获取方法的参数
 			    	Class returnType = method.getReturnType();//获取方法的返回类型
 			    	try {
-			    		//method.invoke(test.class.newInstance(), 666);
-			    		Object x = method.invoke(new test(1), 666);
+			    		User user = (User)Method3Class.newInstance();
+			    		Object x = method.invoke(user);//user.getName();
+			    		//Object x = method.invoke(new test(1), 666);
+			    		//new关键字能调用任何构造方法,newInstance()只能调用无参构造方法。但反射的场景中是不应该有机会使用new关键词的。
 			    		System.out.println(x);
-			    		// new关键字能调用任何构造方法。 newInstance()只能调用无参构造方法。
+			    		
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 			    }
@@ -101,9 +104,11 @@ public class reflectionTest {
 			
 			
 			
-			Method method = Method3Class.getMethod("int2string", Integer.class);
-			Object x = method.invoke(new test(2), 666);//第一个参数是类的对象。第二参数是函数的参数
-			System.out.println(x);
+			Method method = Method3Class.getMethod("setName",String.class);
+			User user1 = (User)Method3Class.getConstructor(String.class,Integer.class).newInstance("lisi",19);
+			//调用自定义构造器的方法
+			Object x = method.invoke(user1,"李四");//第一个参数是类的对象。第二参数是函数的参数
+			System.out.println(user1.getName());
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
@@ -111,15 +116,32 @@ public class reflectionTest {
 	}
 }
 
-class test{
-	private Integer n;  
+class User{
+	private Integer age;
+	private String name;
+	
+    public User() {}
     
-    public test(Integer n){ //构造函数，初始化时执行
-    	this.n = n;
+    public User(String name,Integer age){ //构造函数，初始化时执行
+    	this.age = age;
+    	this.name = name;
     }
-    public String int2string(Integer n) {
-    	System.out.println("here");
-    	return Integer.toString(n);
+    
+
+	public Integer getAge() {
+		return age;
+	}
+
+	public void setAge(Integer age) {
+		this.age = age;
+	}
+
+	public String getName() {
+		return name;
+	}
+	
+    public void setName(String name) {
+    	this.name = name;
     }
 }
 ```
@@ -221,9 +243,80 @@ class operation {
 
 ![img](img/JavaDeserStep2/2.png)
 
-0x3、思考总结
+### 0x3、通过setAccessible访问私有属性和函数
 
- 
+```java
+package Step2;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+/*
+ * 测试setAccessible方法，可以通过将它设置为true--setAccessible(true) 来访问private属性和函数。
+ * 而且可以提高程序的执行效率，因为减少了安全检查。
+ */
+public class reflectionTest3 {
+	
+	public static void main(String[] args){
+		try {
+			String path = "Step2.User3"; 
+			Class clazz = Class.forName(path);
+			
+			//Method method = clazz.getMethod("setName",String.class);
+			//getMethod只能获取public的方法，private的方法需要使用getDeclaredMethod来获取，并且设置setAccessible(true)才可以调用访问。
+			//参数属性也是一样。
+			Method method = clazz.getDeclaredMethod("setName", String.class);
+			method.setAccessible(true);
+			
+			//Constructor strut = clazz.getConstructor(String.class,Integer.class);
+			//getConstructor只能获取public的构造方法
+			Constructor strut = clazz.getDeclaredConstructor(String.class,Integer.class);
+			strut.setAccessible(true);
+			User3 user = (User3)strut.newInstance("bit4",19);
+			//调用自定义构造器的方法
+			Object x = method.invoke(user,"比特");//第一个参数是类的对象。第二参数是函数的参数
+			System.out.println(user.getName());
+			
+			
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+	}
+}
+
+class User3{
+	
+	private Integer age;
+	private String name;
+	
+	private User3() {}
+    
+	private User3(String name,Integer age){ //构造函数，初始化时执行
+    	this.age = age;
+    	this.name = name;
+    }
+    
+
+	private Integer getAge() {
+		return age;
+	}
+
+	private void setAge(Integer age) {
+		this.age = age;
+	}
+
+	public String getName() {
+		return name;
+	}
+	
+	private void setName(String name) {
+    	this.name = name;
+    }
+}
+```
+
+
+
+### 0x4、思考总结
 
 <u>程序的两大根本：变量与函数</u>
 
