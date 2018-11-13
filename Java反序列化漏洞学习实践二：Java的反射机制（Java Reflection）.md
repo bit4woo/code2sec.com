@@ -390,4 +390,4 @@ class User3{
 
 <http://ifeve.com/java-reflection/>
 
-Apache Commons Collections 3.x 版本的 Gadget调用链： http://blog.knownsec.com/2015/12/untrusted-deserialization-exploit-with-java/
+[Apache Commons Collections 3.x 版本的 Gadget调用链](http://blog.knownsec.com/2015/12/untrusted-deserialization-exploit-with-java/)
