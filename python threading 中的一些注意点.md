@@ -1,6 +1,6 @@
 Title:python threading使用的一些注意点
 Date: 2018-08-28 10:20
-Category: python安全
+Category: 代码片段
 Tags: python,threading
 Slug: 
 Authors: bit4
