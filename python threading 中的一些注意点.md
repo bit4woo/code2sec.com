@@ -239,6 +239,65 @@ print "Elapsed Time: %s" % (time.time() - start)
 
 
 
+自己在[Teemo](https://github.com/bit4woo/teemo)中的使用，正常跑起来的，Queue和线程都有join()，注意区分使用场景：
+
+```python
+def domains2ips(domain_list):
+    input_Queue = Queue.Queue()
+    for item in domain_list:
+        input_Queue.put(item)
+
+
+    outout_ips_Queue = Queue.Queue()
+    outout_lines_Queue = Queue.Queue()
+
+
+    class customers(threading.Thread):
+        def __init__(self):
+            threading.Thread.__init__(self)
+
+        def run(self):
+            while True:
+                if input_Queue.empty():
+                    break
+                domain = input_Queue.get(1)
+                #input_Queue.task_done() #no need in this program
+                domain = domain.strip()
+                try:
+                    ips, line = query(domain, record_type='A')
+                    print line
+                    for ip in ips:
+                        outout_ips_Queue.put(ip)
+                    outout_lines_Queue.put(line)
+                except Exception, e:
+                    print e
+                #
+                # # signals to queue job is done
+                # outout_ips_Queue.task_done()
+                # outout_lines_Queue.task_done()
+
+    for i in range(10):
+        dt = customers()
+        dt.setDaemon(True)
+        dt.start()
+        dt.join()#use this instead Queue.join()，Queue.join() will lead to thread always running!!
+
+    # wait on the queue until everything has been processed
+    # input_Queue.join()
+    # outout_ips_Queue.join()
+    # outout_lines_Queue.join()
+
+    iplist =[]
+    linelist = []
+    while not outout_ips_Queue.empty():
+        iplist.append(outout_ips_Queue.get(timeout=0.1))
+    while not outout_lines_Queue.empty():
+        linelist.append(outout_lines_Queue.get(timeout=0.1))
+    return iplist,linelist
+```
+
+
+
 #### 0x3、多线程挂起问题排查
 
 
