@@ -136,6 +136,12 @@ ipconfig || ifconfig
 
 使用实例：
 ping -n 3 xxx.test.0v0.com || ping -c 3 xxx.test.0v0.com
+
+===============================================================
+
+群里大佬发了一个兼容windows和Linux的ping命令!!!6666
+
+ping -nc 1 xxx.test.0v0.com
 ```
 
 
