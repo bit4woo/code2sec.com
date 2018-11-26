@@ -21,7 +21,7 @@ Summary:
 3. 利用自定义函数，需要在函数调用时执行。
 4. 利用接口的重写方法，应该也是在函数调用时执行。
 
-![](img/JavaDeserStep6/恶意类的构造.png)
+![](xmind/恶意类的构造-by bit4.png)
 
 demo代码：
 
