@@ -8,19 +8,39 @@ Summary:
 
 #### 0x0、threading的join和setDaemon方法的区别及用法
 
-join ()方法：主线程A中，创建了子线程B，并且在主线程A中调用了B.join()，那么，主线程A会在调用的地方等待，直到子线程B完成操作后，才可以接着往下执行，那么在调用这个线程时可以使用被调用线程的join方法。 join可以设置超时时间。      -------主线程（一般是当前逻辑代码所在线程）等待子线程结束后再继续运行
+**join ()方法**：主线程A中创建了子线程B，并且在主线程A中调用了B.join()，**它的含义是【将线程B加入到当前线程的执行流程中】**。也就是说主线程A会在调用的地方等待，直到子线程B完成操作或超时后才可以接着往下执行。
+
+另外，join可以设置超时时间，在超时后继续执行当前线程，停止阻塞，意味着“B线程从当前执行流程中（A线程）再次独立出来，不受主线程影响”。
+
+![](img/pythonThreading/join-timeout.png)
+
+如果每个子线程启动start()后马上调用了join()函数，那么每个子线程都是顺序执行的，并没有并发效果。
 
 
 
-setDaemon()方法：主线程A中，创建了子线程B，并且在主线程A中调用了B.setDaemon(),这个的意思是，把主线程A设置为守护线程，这时候，要是主线程A执行结束了，就不管子线程B是否完成,一并和主线程A退出.**这就是setDaemon方法的含义，这基本和join是相反的。**此外，还有个要特别注意的：必须在start() 方法调用之前设置，如果不设置为守护线程，程序会被无限挂起。
+**setDaemon()方法**：
+
+主线程A中，创建了子线程B，并且在主线程A中调用了B.setDaemon()，它的含义是【把子线程B设置为守护线程】这时候，要是主线程A执行结束了，就不管子线程B是否完成，一并和主线程A退出.
+
+根据[官方文档](https://docs.python.org/2/library/threading.html#threading.Thread.daemon)
+
+```
+A boolean value indicating whether this thread is a daemon thread (True) or not (False). This must be set before start() is called, otherwise RuntimeError is raised. Its initial value is inherited from the creating thread; the main thread is not a daemon thread and therefore all threads created in the main thread default to daemon = False.
+
+The entire Python program exits when no alive non-daemon threads are left.
+```
+
+ “当所有的非守护进程结束的时候，python程序也就结束了！！！”。
+
+因为主线程默认是非守护进程，因此，所有的由该主线程创建的子线程都不是守护进程。也就是说，将某个子线程设置为守护进程，就表明该线程不重要，不能影响主线程是否结束，当主线程结束的时候（也就是所有非守护进程结束的时候）程序直接结束了，这个时候守护线程会被强制结束。
+
+![](img/pythonThreading/daemon-exit.png)
 
 
 
-也就是说用了join()主线程会等子线程；而用了setDaemon()主线程结束时，子线程会被强制结束。
+<u>总之，用了join()方法，主线程会等子线程结束或超时；而用了setDaemon()方法，主线程结束时子线程会被强制结束。</u>
 
-
-
-当同时使用了join()和setDaemon()方法时，join会起作用(会等待)，setDaemon失效。测试代码如下。
+当同时使用了join()和setDaemon()方法时，join会起作用(会等待)，setDaemon失效，因为。测试代码如下。
 
 ```python
 # !/usr/bin/env python
@@ -30,31 +50,26 @@ __github__ = 'https://github.com/bit4woo'
 
 import time
 import threading
-import requests
-
 
 def fun():
-    default_proxies = {
-        "http": "http://127.0.0.1:8080",
-        "https": "https://127.0.0.1:8080",
-    }
     print "sub thread start"
-    time.sleep(5)
-    requests.get("http://www.code2sec.com",proxies= default_proxies)
-    print "sub thread sleep done"
+    while True:
+        time.sleep(1)
+        print "sub is alive"
     print "sub thread end"
 
 try:
     print "main thread start"
     t1 = threading.Thread(target=fun,args=())
-    #t1.setDaemon(True)
+    t1.setDaemon(True)
     t1.start()
-    t1.join() #当同时使用了join和setDaemon，join会起作用，setDaemon失效
+    t1.join()#当同时使用setDaemon(True)方法和join()方法时，当然是join方法生效啊。
+    # 因为setDaemon()方法必须在start()之前，而join方法必须在start()方法之后。join覆盖了setDaemon的作用。
     t1.join()
     t1.join()#多次join无影响
     time.sleep(3)
-    print "main thread sleep done"
     print "main thread end"
+    print "sub thread is alive ? {0}".format(t1.is_alive())
 except KeyboardInterrupt as e:
     print "exit"
 ```
