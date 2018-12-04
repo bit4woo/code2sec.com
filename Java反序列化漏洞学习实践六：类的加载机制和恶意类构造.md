@@ -14,7 +14,7 @@ Summary:
 
 ### **0x1、恶意类构造及其触发方式**
 
-![](xmind/Java恶意类的构造.png)
+![Java恶意类的构造](img/JavaDeserStep6/Java恶意类的构造.png)
 
 如思维导图所示，总结了可以构造恶意类的几种方式：
 
