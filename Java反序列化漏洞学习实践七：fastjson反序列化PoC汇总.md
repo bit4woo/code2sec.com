@@ -225,4 +225,8 @@ class Gadget {
 
 [defineClass在java反序列化当中的利用](https://xz.aliyun.com/t/2272)
 
-[秒懂Java动态编程（Javassist研究）](https://blog.csdn.net/ShuSheng0007/article/details/81269295)
+[基于JdbcRowSetImpl（JNDI）的Fastjson RCE PoC构造与分析（也就是不受限于SupportNonPublicField）](<http://xxlegend.com/2017/12/06/%E5%9F%BA%E4%BA%8EJdbcRowSetImpl%E7%9A%84Fastjson%20RCE%20PoC%E6%9E%84%E9%80%A0%E4%B8%8E%E5%88%86%E6%9E%90/>)
+
+[fastjson 远程反序列化poc的构造和分析](http://xxlegend.com/2017/04/29/title-%20fastjson%20%E8%BF%9C%E7%A8%8B%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96poc%E7%9A%84%E6%9E%84%E9%80%A0%E5%92%8C%E5%88%86%E6%9E%90/)
+
+[vulhub漏洞环境](https://github.com/vulhub/vulhub/tree/master/fastjson/vuln)
