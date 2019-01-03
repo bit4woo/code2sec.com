@@ -19,8 +19,8 @@
 		{
           if (httprequest.readyState == 4 && httprequest.status == 200)
 		  {
-			//alert(httprequest.responseText);
-			document.getElementById("demo").innerHTML = alert(this.responseText);
+			alert(httprequest.responseText);
+			//document.getElementById("demo").innerHTML = alert(this.responseText);
           }
         }
         httprequest.open("POST", requesturl, true);//socket connection
@@ -38,8 +38,8 @@
 		{
 		if (this.readyState == 4 && this.status == 200)
 			{
-				//alert(this.responseText);
-				document.getElementById("demo").innerHTML = alert(this.responseText);
+				alert(this.responseText);
+				//document.getElementById("demo").innerHTML = alert(this.responseText);
 			}
 		};		
 		xhttp.open("GET", requesturl, true);
