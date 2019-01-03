@@ -1,0 +1,90 @@
+<html>
+  <head>
+  <META charset="utf-8">
+    <script type="text/javascript">
+	function corspost() {
+		var requesturl=document.getElementById('url').value;
+		var requestparams=document.getElementById('params').value;
+		var requestContenttype=document.getElementById('Contenttype').value;
+        var httprequest;
+        if (window.XMLHttpRequest) 
+		{ // code for IE7+, Firefox, Chrome, Opera, Safari
+          httprequest = new XMLHttpRequest();
+        } else 
+		{ // code for IE6, IE5
+          httprequest = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+		
+        httprequest.onreadystatechange = function()
+		{
+          if (httprequest.readyState == 4 && httprequest.status == 200)
+		  {
+			//alert(httprequest.responseText);
+			document.getElementById("demo").innerHTML = alert(this.responseText);
+          }
+        }
+        httprequest.open("POST", requesturl, true);//socket connection
+		httprequest.withCredentials = true;//request with cookie
+        httprequest.setRequestHeader("Content-type", requestContenttype);
+        httprequest.send(requestparams);
+    }
+	
+	
+	function corsget() 
+	{
+	var xhttp = new XMLHttpRequest();
+	var requesturl=document.getElementById('geturl').value;
+		xhttp.onreadystatechange = function() 
+		{
+		if (this.readyState == 4 && this.status == 200)
+			{
+				//alert(this.responseText);
+				document.getElementById("demo").innerHTML = alert(this.responseText);
+			}
+		};		
+		xhttp.open("GET", requesturl, true);
+		xhttp.withCredentials = true;
+		xhttp.send();
+		console.log(this.responseText)
+	}
+	</script>
+  </head>
+  
+  <body>
+	<div id="demo">
+	
+	
+    <h2>CORS GET Request:</h2>
+	request url       :</br>
+	<input id="geturl" type="text" name="requesturl" placeholder="url" size="100"></input></br></br>
+	
+    <button type="button" onclick="corsget()">CORS GET</button>
+	</br>
+	</br>
+  
+  
+  
+  
+    <h2>CORS POST Request:</h2>
+	request url       :</br>
+	<input id="url" type="text" name="requesturl" placeholder="url" size="100" ></input></br></br>
+	request parameters:</br>
+	<input id="params" type="text" name="requestparams" placeholder="params" size="100"></input></br></br>
+	Content type:</br>
+	<input id="Contenttype" type="text" name="requestContenttype" placeholder="Content-type"></input></br></br>
+	
+    <button type="button" onclick="corspost()">CORS POST</button></br></br>
+	</br>
+	</br>
+	<b>caustion:
+	if run this file in local(file://xxx/xx/cors.html),the Origin header will be null(Origin: null).
+	because Cross origin requests are only supported for protocol schemes: http, data, chrome, chrome-extension, https.
+	</br>
+	</br>
+	so it's better to run this page in your website. you will see header like this:</br></br>
+	Referer: http://burp/</br>
+	Origin: http://burp</br>
+	</b>
+  </body>
+
+</html>
