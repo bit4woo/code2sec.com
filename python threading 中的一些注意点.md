@@ -243,7 +243,7 @@ def main():
 
 
     #wait on the queue until everything has been processed
-    queue.join()
+    queue.join()#attention！this method only works with "queue.task_done()"，or the main threading will always supended!!!
     out_queue.join()
 
 main()
@@ -262,21 +262,20 @@ def domains2ips(domain_list):
     for item in domain_list:
         input_Queue.put(item)
 
-
     outout_ips_Queue = Queue.Queue()
     outout_lines_Queue = Queue.Queue()
 
-
     class customers(threading.Thread):
-        def __init__(self):
+        def __init__(self,name):
             threading.Thread.__init__(self)
+            print name
 
         def run(self):
             while True:
                 if input_Queue.empty():
                     break
                 domain = input_Queue.get(1)
-                #input_Queue.task_done() #no need in this program
+                input_Queue.task_done()#配合写法一，但是写在这里可能导致结果缺少数据
                 domain = domain.strip()
                 try:
                     ips, line = query(domain, record_type='A')
@@ -286,21 +285,47 @@ def domains2ips(domain_list):
                     outout_lines_Queue.put(line)
                 except Exception, e:
                     print e
-                #
-                # # signals to queue job is done
-                # outout_ips_Queue.task_done()
-                # outout_lines_Queue.task_done()
-
+                #配合写法一
+                # signals to queue job is done
+                # input_Queue.task_done()  # 配合写法一
+                #outout_ips_Queue.task_done() # 用于put的，不能调用该方法！当然后续也不能调用它的join方法
+                #outout_lines_Queue.task_done()# 用于put的，不能调用该方法！当然后续也不能调用它的join方法
+                
+    # 写法一：参考IBM最佳实践代码，推荐写法，
+    # 但是值得注意的是：
+    # 1.使用Queue的join()方法，必须配合Queue的task_done()方法，否则主进程将一直挂起
+    # 2. put队列完成的时候千万不能用task_done()，否则会报错：# task_done() called too many times 因为该方法仅仅表示get成功后，执行的一个标记。
+    # 3.task_done()的位置也是有讲究的，最好是放在程序块的末尾，保证所有逻辑都已执行完成，否则结果可能缺少数据！！！！
+    # 因为它是线程结束的依据，如果它的位置在get()之后而不是在程序块的末尾，会出现刚取完数据，还未来得及处理主线程就已经结束的情况，从而缺少数据！！！
     for i in range(10):
-        dt = customers()
+        dt = customers(i)
         dt.setDaemon(True)
         dt.start()
-        dt.join()#use this instead Queue.join()，Queue.join() will lead to thread always running!!
-
     # wait on the queue until everything has been processed
-    # input_Queue.join()
-    # outout_ips_Queue.join()
-    # outout_lines_Queue.join()
+    input_Queue.join()# this method works must with "input_Queue.task_done()", or the threading will not exit!!!
+    # outout_ips_Queue.join() #不能调用task_done()就不能调用join()
+    # outout_lines_Queue.join() #不能调用task_done()就不能调用join()
+
+
+    # 写法二：这种写法并没有多线程的效果！！！
+    # 当初在自己未充分理解第一种方法，未配合task_done()有问题时，尝试了该方法。该方法实际效果是单线程！
+    # for i in range(10):
+    #     dt = customers(i)
+    #     dt.setDaemon(True)
+    #     dt.start()
+    #     dt.join()#use this instead Queue.join()，Queue.join() will lead to thread always running!!
+
+    # 写法三：该方法可用于小量固定线程数的写法中，如果需要创建大量线程，则效率不高。
+    # Threadlist = []
+    # for i in range(10):
+    #     dt = customers(i)
+    #     dt.setDaemon(True)
+    #     dt.start()
+    #     Threadlist.append(dt)
+    #
+    # for item in Threadlist:
+    #     item.join()
+
 
     iplist =[]
     linelist = []
