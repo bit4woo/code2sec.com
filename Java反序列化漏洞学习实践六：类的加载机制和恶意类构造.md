@@ -264,6 +264,129 @@ public class createEvilClass {
 
 
 
+### 0x3、反序列化过程到底做了什么
+
+有了上面的知识，我们再次回到我们关注的重点---反序列化。反序列化的过程到底做了些什么呢？
+
+反序列化过程 == 将字节流还原成对象实例的过程
+
+反序列化过程 == 创建空对象+设置对象属性的过程（readObject()函数负责）
+
+反序列化过程 == 类的加载+创建对象+调用readObject
+
+
+
+什么时候调用构造函数，什么时候不需要调用：
+
+the deserialization process populates the object tree by copying data from the serialized stream without calling the constructor. So an attacker can't execute Java code residing inside the constructor of the serializable object class.
+
+
+
+https://www.ibm.com/developerworks/library/se-lookahead/index.html
+
+通过数据流还原类的过程中，需要调用输入流的
+
+resolveClass方法---
+
+
+
+https://howtodoinjava.com/java/serialization/how-deserialization-process-happen-in-java/
+
+https://docs.microsoft.com/en-us/dotnet/standard/serialization/steps-in-the-serialization-process
+
+https://www.javaworld.com/article/2072752/the-java-serialization-algorithm-revealed.html
+
+```
+package Step1;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
+public class deserTest2 implements Serializable {  
+	
+    /**
+	 * 创建一个简单的可被序列化的类，它的实例化后的对象就是可以被序列化的。
+	 * 然后重写readObject方法，实现弹计算器。
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private int n;
+	
+	static {
+        try {
+			Runtime.getRuntime().exec("notepad.exe");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+    
+    public deserTest2(int n){ //构造函数，初始化时执行
+        this.n=n;
+        try {
+			Runtime.getRuntime().exec("mstsc.exe");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    //重写readObject方法，加入了弹计算器的执行代码的内容
+    private void readObject(java.io.ObjectInputStream in) throws IOException,ClassNotFoundException{
+    	in.defaultReadObject();//调用原始的readOject方法
+    	Runtime.getRuntime().exec("calc.exe");
+    	System.out.println("test");
+    }
+    
+    public static void main(String[] args) {
+    	deserTest2 x = new deserTest2(5);//实例一个对象
+    	operation2.ser(x);//序列化
+    	operation2.deser();//反序列化
+    }
+}
+
+class operation2 {
+	public static void ser(Object obj) {
+		//序列化操作，写数据
+		try{
+	        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("object.obj"));
+	        //ObjectOutputStream能把Object输出成Byte流
+	        oos.writeObject(obj);//序列化关键函数
+	        oos.flush();  //缓冲流 
+	        oos.close(); //关闭流
+	    } catch (FileNotFoundException e) 
+	    {        
+	        e.printStackTrace();
+	    } catch (IOException e) 
+	    {
+	        e.printStackTrace();
+	    }
+	}
+	
+	public static void deser() {
+		//反序列化操作，读取数据
+		try {
+			File file = new File("object.obj");
+			ObjectInputStream ois= new ObjectInputStream(new FileInputStream(file));
+			Object x = ois.readObject();//反序列化的关键函数
+			System.out.print(x);
+			ois.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}
+
+```
+
+
+
 ### 0x3、参考
 
 [技术专栏 | 深入理解JNDI注入与Java反序列化漏洞利用](https://mp.weixin.qq.com/s?__biz=MjM5NzE1NjA0MQ==&mid=2651198215&idx=1&sn=929dd320ac2b17682e6c7d3f163f6985&chksm=bd2cf6a18a5b7fb758e4000c253adba90de67f72527ae1525a1d6722a09a85a06c8d800a08a7&scene=0#rd)
