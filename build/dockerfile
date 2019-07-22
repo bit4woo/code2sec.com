@@ -19,6 +19,9 @@ RUN service nginx start
 
 RUN apt-get install -y python && apt-get install python-pip -y && apt-get install git -y
 RUN pip install pelican markdown
+RUN pip uninstall docutils -y
+RUN pip install docutils==0.14
+#docutils 0.15 exist bug, use 0.14
 RUN mkdir blog
 WORKDIR /blog
 RUN git clone https://github.com/bit4woo/code2sec.com
