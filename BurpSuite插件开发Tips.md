@@ -8,7 +8,7 @@ Summary:
 
 ## 更新说明
 
-20190828更新：之前这篇文章是完成了一个插件项目后的总结，后续渐渐更新发现它更像一个插件编写入门指引了。尤其是完成了JSRC上“安全小课堂第142期【burp插件开发入门】”后，进行了大量更新。但其中的部分截图和内容说明仍然包含了项目的信息，故还是保留“缘由”部分。
+20190828更新：之前这篇文章是完成了一个插件项目后的总结，后续渐渐更新发现它更像一个插件编写入门指引了。尤其是完成了JSRC上“安全小课堂第142期【burp插件开发入门】”后，进行了大量更新。
 
 ## ~~缘由~~
 
@@ -83,7 +83,7 @@ Summary:
 
 ![img](img/BurpExtenderAES/8.png)
 
-## 插件代码的套路
+## **插件代码的套路**
 
 （常见逻辑可参考个人的一些总结 https://github.com/bit4woo/burp-api-drops）
 
@@ -114,7 +114,7 @@ processHttpMessage 中需要做的事
 
 修改各对象并更新到最终的数据包
 
-## 图形界面怎么搞
+## **图形界面怎么搞**
 
 1.安装windowbuilder插件
 
@@ -142,7 +142,7 @@ processHttpMessage 中需要做的事
 - `getUiComponent();` –之前踩过的大坑
 - `IContextMenuFactory` —-对应的是那个“send to”功能
 
-## 调试方法
+## **调试方法**
 
 前面讲了选择Java作为首选语言，这里也就讲Java中的调试方法。国内我们用的burp版本大家都懂的一般有使用helper的，有使用keygen的，如果要调试，你需要使用keygen。
 
@@ -158,7 +158,9 @@ Java-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -Xbootcla
 
 另外一边是IDE的配置。以idea为例。
 
-![debug](img/BurpExtenderAES/debug.png)
+![img](https://mmbiz.qpic.cn/mmbiz_png/Z9MuUwaeeGJK87QLIH2SJ4TyLQLXRbk3wsyiaTavxUDOOpzaevJ6xBrZUNVia9iajicDAUN6hicVjsryxKU0LqAt0IA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+
+
 
 如上debug模式的burp和IDE都配置好后，就可以进行下断点调试了。需要注意的是，你需要保持IDE中的代码，和你打包的插件的代码一致。有一个参考文章给师傅们。
 https://blog.netspi.com/debugging-burp-extensions/我们这里讲的方法与之不同的地方，就是刚提到的burp的debug模式启动命令。
