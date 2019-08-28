@@ -26,6 +26,9 @@ public class referCheck {
           try {
               url = new URL(urlstring);
               String host = url.getHost();
+              if (host.contains("\\") || host.contains("#")) {//getHost()方法可以被反斜线绕过，即returnUrl=http://www.evil.com\www.aaa.com会被代码认为是将要跳转到.aaa.com，而实际在浏览器中反斜线被纠正为正斜线，跳转到www.evil.com/www.aaa.com，最终还是跳到www.evil.com的服务器
+				return false;
+			}
               if (host.endsWith(".baidu.com")) {//the first dot is required!!!
                    return true;
               }else {
@@ -47,4 +50,12 @@ public class referCheck {
 }
 ```
 
-如果绕过方法，请赐教~~bit4woo@163.com
+如有绕过方法，请赐教~~bit4woo@163.com
+
+20190828：更新代码，考虑低版本JDK中，利用反斜线和井号让的情况。
+
+
+
+**参考：**
+
+[安全小课堂第134期【浅谈URL跳转漏洞的挖掘与防御】](https://mp.weixin.qq.com/s?__biz=MjM5OTk2MTMxOQ==&mid=2727830135&idx=1&sn=7ede1010da3e21e54ce5a4b34230037f&chksm=8050b5ffb7273ce90382d168ca773310a93ec85413c92c2956c2870762924e9bc9ab3b7ef365&scene=27#wechat_redirect)

