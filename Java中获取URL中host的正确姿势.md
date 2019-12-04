@@ -3,7 +3,7 @@ Date: 2018-08-28 10:20
 Category: 代码片段
 Tags: Java,getHost
 Slug: 
-Authors: bit4
+Authors: bit4woo
 Summary: 
 
 #### 0x0、Java中获取URL的Host的正确姿势

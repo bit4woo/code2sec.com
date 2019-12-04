@@ -3,7 +3,7 @@ Date: 2017-09-22 10:20
 Category: python安全
 Tags: python,PyYAML,反序列化,漏洞
 Slug: 
-Authors: bit4
+Authors: bit4woo
 Summary: 
 
 ### 0x0 概述
@@ -49,7 +49,7 @@ weather: sunny
 ```python
 # !/usr/bin/env python
 # -*- coding:utf-8 -*-
-__author__ = 'bit4'
+__author__ = 'bit4woo'
 __github__ = 'https://github.com/bit4woo'
 
 import yaml
@@ -83,7 +83,7 @@ print(yaml.load(file('sample.yml', 'r')))
 ```python
 # !/usr/bin/env python
 # -*- coding:utf-8 -*-
-__author__ = 'bit4'
+__author__ = 'bit4woo'
 __github__ = 'https://github.com/bit4woo'
 __filename__ = 'yaml_gen_poc.py'
 
@@ -111,7 +111,7 @@ fp.write(payload)
 ```python
 # !/usr/bin/env python
 # -*- coding:utf-8 -*-
-__author__ = 'bit4'
+__author__ = 'bit4woo'
 __github__ = 'https://github.com/bit4woo'
 __filename__ = "yaml_verify.py"
 

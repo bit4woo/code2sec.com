@@ -3,7 +3,7 @@ Date: 2017-12-08 10:20
 Category: 漏洞实践
 Tags: Java,反序列化,漏洞
 Slug: 
-Authors: bit4
+Authors: bit4woo
 Summary: 
 
 ### **0x0、基础**

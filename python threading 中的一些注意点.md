@@ -3,7 +3,7 @@ Date: 2018-08-28 10:20
 Category: 代码片段
 Tags: python,threading
 Slug: 
-Authors: bit4
+Authors: bit4woo
 Summary: 
 
 #### 0x0、threading的join和setDaemon方法的区别及用法

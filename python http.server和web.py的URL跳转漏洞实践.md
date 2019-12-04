@@ -3,7 +3,7 @@ Date: 2018-01-20 10:20
 Category: python安全
 Tags: python安全,URL redirect
 Slug: 
-Authors: bit4
+Authors: bit4woo
 Summary: 
 
 
@@ -89,7 +89,7 @@ http.server open redirect的poc
 ```python
 # !/usr/bin/env python
 # -*- coding:utf-8 -*-
-__author__ = 'bit4'
+__author__ = 'bit4woo'
 __github__ = 'https://github.com/bit4woo'
 
 '''
@@ -130,7 +130,7 @@ web.py open redirect的poc:
 ```python
 # !/usr/bin/env python
 # -*- coding:utf-8 -*-
-__author__ = 'bit4'
+__author__ = 'bit4woo'
 __github__ = 'https://github.com/bit4woo'
 
 '''

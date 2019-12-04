@@ -3,7 +3,7 @@ Date: 2017-03-22 10:20
 Category: python安全
 Tags: python,Pickle,漏洞,反序列化
 Slug: 
-Authors: bit4
+Authors: bit4woo
 Summary: 
 
 # 0x01 Pickle的典型应用场景 #
@@ -29,7 +29,7 @@ Summary:
 ```python
 # !/usr/bin/env python
 # -*- coding:utf-8 -*-
-__author__ = 'bit4'
+__author__ = 'bit4woo'
 __github__ = 'https://github.com/bit4woo'
 __filename__ = 'pickle_verify.py'
 
@@ -47,7 +47,7 @@ pickle.load(open('./poc.pickle'))
 ```python
 # !/usr/bin/env python
 # -*- coding:utf-8 -*-
-__author__ = 'bit4'
+__author__ = 'bit4woo'
 __github__ = 'https://github.com/bit4woo'
 __filename__ = 'pickle_poc_gen.py'
 
@@ -94,7 +94,7 @@ fp.write(poc)
 ```python
 # !/usr/bin/env python
 # -*- coding:utf-8 -*-
-__author__ = 'bit4'
+__author__ = 'bit4woo'
 __github__ = 'https://github.com/bit4woo'
 __filename__ = 'pickle_verify_httpserver.py'
 
@@ -155,7 +155,7 @@ http://127.0.0.1:8000/?payload=cnt%0Asystem%0Ap1%0A(S%27echo%20test%20%3Epoc.txt
 ```python
 # !/usr/bin/env python
 # -*- coding:utf-8 -*-
-__author__ = 'bit4'
+__author__ = 'bit4woo'
 __github__ = 'https://github.com/bit4woo'
 __filename__ = 'pickle_poc_gen0.py'
 
@@ -229,7 +229,7 @@ R：执行紧靠自己左边的一个括号对中的内容，即( 和他t直接�
 ```python
 # !/usr/bin/env python
 # -*- coding:utf-8 -*-
-__author__ = 'bit4'
+__author__ = 'bit4woo'
 __github__ = 'https://github.com/bit4woo'
 __filename__ = 'pickle_poc_gen0.py'
 
@@ -297,7 +297,7 @@ print urllib.quote(payload)
 ```python
 # !/usr/bin/env python
 # -*- coding:utf-8 -*-
-__author__ = 'bit4'
+__author__ = 'bit4woo'
 __github__ = 'https://github.com/bit4woo'
 __filename__ = 'pickle_poc_gen1.py'
 #from https://gist.github.com/freddyb/3360650

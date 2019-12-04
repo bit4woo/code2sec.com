@@ -3,7 +3,7 @@ Date: 2018-01-29 10:20
 Category: 思路总结
 Tags: OAuth2.0,authorization code,授权码模式
 Slug: 
-Authors: bit4
+Authors: bit4woo
 Summary: 
 
 根据自己的理解，通俗地理解OAuth2.0的授权码模式

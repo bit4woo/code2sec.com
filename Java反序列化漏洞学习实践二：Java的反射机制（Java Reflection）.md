@@ -3,7 +3,7 @@ Date: 2017-12-05 10:20
 Category: 漏洞实践
 Tags: Java,反序列化,漏洞
 Slug: 
-Authors: bit4
+Authors: bit4woo
 Summary: 
 
 学习Java的反射机制是为了理解Apache Commons Collections中的反序列化漏洞做准备的。

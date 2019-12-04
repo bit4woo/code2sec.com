@@ -3,7 +3,7 @@ Date: 2018-01-09 10:20
 Category: 工具相关
 Tags: pelican,blog,docker
 Slug: 
-Authors: bit4
+Authors: bit4woo
 Summary: 
 
 
@@ -25,8 +25,8 @@ Summary:
 # -*- coding: utf-8 -*- #
 from __future__ import unicode_literals
 
-AUTHOR = u'bit4'
-SITENAME = u"bit4's blog"
+AUTHOR = u'bit4woo'
+SITENAME = u"bit4woo's blog"
 SITEURL = ''
 
 PATH = 'content'

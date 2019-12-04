@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*- #
 from __future__ import unicode_literals
 
-AUTHOR = u'bit4'
-SITENAME = u"bit4's blog"
+AUTHOR = u'bit4woo'
+SITENAME = u"bit4woo's blog"
 SITEURL = ''
 
 PATH = 'content'
@@ -21,15 +21,11 @@ AUTHOR_FEED_RSS = None
 
 # Blogroll
 LINKS = (('re4lity', 'http://rinige.com/'),
-         ('BaoBaosb', 'http://www.meijj.org/'),
-         ('CF_HB', 'http://www.coffeehb.cn/'),
          ('cdxy', 'https://www.cdxy.me/'),
-	 ('薇拉vera', 'http://www.zuozuovera.cn/'),
 	 ('bsmali4', 'http://www.codersec.net/'),
 	 ('廖新喜','http://xxlegend.com/'),
 	 ('PHITHON','https://www.leavesongs.com/'),
-	 ('勾陈安全','http://www.polaris-lab.com/'),
-	 ('threathunter','https://threathunter.org/'),)
+	 ('勾陈安全','http://www.polaris-lab.com/'),)
 
 # Social widget
 SOCIAL = (('github', 'https://github.com/bit4woo'),

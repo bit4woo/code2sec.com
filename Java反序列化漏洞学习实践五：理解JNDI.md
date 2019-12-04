@@ -3,7 +3,7 @@ Date: 2018-11-12 18:04
 Category: 漏洞实践
 Tags: Java,反序列化,漏洞
 Slug: 
-Authors: bit4
+Authors: bit4woo
 Summary: 
 
 ### **0x0、JNDI的使用场景**
