@@ -3,7 +3,7 @@ Date: 2018-01-17 10:20
 Category: 工具相关
 Tags: DNSlog,API
 Slug: 
-Authors: bit4
+Authors: bit4woo
 Summary: DNSlog的改造和使用
 
 ### 0x0、DNSlog的改造
@@ -35,7 +35,7 @@ http://127.0.0.1:8000/apidel/{logtype}/{udomain}/{token}/
 ```python
 # !/usr/bin/env python
 # -*- coding:utf-8 -*-
-__author__ = 'bit4'
+__author__ = 'bit4woo'
 __github__ = 'https://github.com/bit4woo'
 
 import hashlib

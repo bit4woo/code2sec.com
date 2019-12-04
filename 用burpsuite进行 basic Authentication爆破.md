@@ -3,7 +3,7 @@ Date: 2017-12-01 10:20
 Category: 工具相关
 Tags: basic Authentication, brute force
 Slug: 
-Authors: bit4
+Authors: bit4woo
 Summary: 
 
 ### 0x0、了解basic Authentication的本质

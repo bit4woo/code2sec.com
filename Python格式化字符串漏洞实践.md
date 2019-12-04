@@ -3,7 +3,7 @@ Date: 2018-01-22 10:20
 Category: python安全
 Tags: 漏洞实践,Python,格式化字符串漏洞
 Slug: 
-Authors: bit4
+Authors: bit4woo
 Summary: 
 
 ### 0x0、核心问题

@@ -3,12 +3,12 @@ Date: 2222-02-22 22:22
 Category: About
 Tags: About
 Slug: 
-Authors: bit4
+Authors: bit4woo
 Summary: 关于我的blog
 
 
 
-### 项目目的
+### [项目](https://github.com/bit4woo/code2sec.com)目的
 
 为了使文章的编写和发布都更简便快捷，也为了更好得备份管理写过的东西，经过摸索，终于找到了一个自己比较满意的模式：
 
@@ -42,71 +42,49 @@ web架构中的安全问题 [大图](https://github.com/bit4woo/code2sec.com/raw
 
 
 
-### 0x2、安全工具
+### 0x2、我的开源 
 
-**【passmaker】根据定制规则生成密码字典**
+**【[passmaker](https://github.com/bit4woo/passmaker)】根据定制规则生成密码字典**
 
 简介：该脚本的主要目标是根据定制的规则来组合生成出密码字典，主要目标是针对企业，希望对安全人员自查“符合密码策略的弱密码”有所帮助。
 
-下载：<https://github.com/bit4woo/passmaker>
 
 
-
-**【Teemo】域名收集及枚举工具**
+**【[Teemo](https://github.com/bit4woo/Teemo)】域名收集及枚举工具** 
 
 简介：域名收集及枚举工具。提莫(teemo)是个侦察兵，域名的收集如同渗透和漏洞挖掘的侦察，故命名为提莫（Teemo）！
 
-下载：<https://github.com/bit4woo/Teemo>
 
 
-
-### 0x3、burp插件
-
-**【reCAPTCHA】一款识别图形验证码的Burp Suite插件**
+**【[reCAPTCHA](https://github.com/bit4woo/reCAPTCHA)】一款识别图形验证码的Burp Suite插件**
 
 简介：一个burp插件，自动识别图形验证码，并用于Intruder中的Payload。
 
-下载：<https://github.com/bit4woo/reCAPTCHA>
 
 
-
-**【Domain Hunter】利用BurpSuite Spider收集子域名和相似域名的插件**
+**【[Domain Hunter](https://github.com/bit4woo/domain_hunter)】利用BurpSuite Spider收集子域名和相似域名的插件**
 
 简介：插件的主要原理就是从BurpSuite的Sitemap中搜索出子域名和相似域名。也可以对已经发现的子域名进行主动爬取，以发现更多的相关域名，这个动作可以自己重复递归下去，直到没有新的域名发现为止。
 
-下载：<https://github.com/bit4woo/domain_hunter>
+
+
+**【[knife](https://github.com/bit4woo/knife)】一个将有用的小功能加入到右键菜单的burp suite插件**
 
 
 
-**【knife】一个将有用的小功能加入到右键菜单的burp suite插件**
-
-简介：目前有四个菜单：
-
-1. copy this cookie
-
-   尝试复制当前请求中的cookie值到剪贴板，如果当前请求没有cookie值，将不做操作。
-
-2. get lastest cookie
-
-   从proxy history中获取与当前域的最新cookie值。个人觉得这个很有有用，特别是当repeater等请求中的cookie过期，而又需要重放复现时。感谢cf_hb师傅的idea。
-
-3. add host to scope
-
-   将当前请求的host添加到burp的scope中，我们常常需要的时将整个网站加到scope而不是一个具体的URL。
-
-4. U2C
-
-   尝试对选中的内容进行【Unicode转中文的操作】，只有当选中的内容时response是才会显示该菜单。
-
-下载：https://github.com/bit4woo/knife
-
-
-
-【U2C】贼好用的Unicode转中文插件
+**【[U2C](https://github.com/bit4woo/u2c)】贼好用的Unicode转中文插件**
 
 完全重写，使用新的tab来展示转码后的响应数据包，不影响原始的响应数据包，更加简洁实用！ 
 
-下载：https://github.com/bit4woo/u2c
+
+
+### 0x3、漏洞复现
+
+[https://github.com/bit4woo/code2sec.com/boom.md](https://github.com/bit4woo/code2sec.com/boom.md)
+
+或
+
+[/boom.md](/boom.md)
 
 
 
@@ -122,7 +100,7 @@ Email: bit4woo@163.com
 
 ### 0x5、Mind
 
-1. ​
+1. 
 
    Q:know it, then hack it …..so, how to know it ? Don’t learn to HACK – Hack to LEARN  ….so, how to hack learn?
 

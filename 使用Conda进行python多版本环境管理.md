@@ -3,7 +3,7 @@ Date: 2018-01-15 10:20
 Category: 工具相关
 Tags: python,环境,Conda,版本切换
 Slug: 
-Authors: bit4
+Authors: bit4woo
 Summary: 
 
 ### 0x0、conda VS. Anaconda VS. miniconda
@@ -84,7 +84,7 @@ reg add /f
 ```python
 # !/usr/bin/env python
 # -*- coding:utf-8 -*-
-__author__ = 'bit4'
+__author__ = 'bit4woo'
 __github__ = 'https://github.com/bit4woo'
 
 import os

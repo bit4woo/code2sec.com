@@ -3,7 +3,7 @@ Date: 2019-08-28 10:20
 Category: 工具相关
 Tags: Java, Burpsuite Extender,安全工具
 Slug: 
-Authors: bit4
+Authors: bit4woo
 Summary: 
 
 ## 更新说明

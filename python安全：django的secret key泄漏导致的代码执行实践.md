@@ -3,7 +3,7 @@ Date: 2018-02-01 10:20
 Category: python安全
 Tags: 反序列化,django,pickle,secret key,python
 Slug: 
-Authors: bit4
+Authors: bit4woo
 Summary: 
 
 ### 0x0、secret key的用途和泄漏导致的攻击面

@@ -3,7 +3,7 @@ Date: 2017-08-07 10:20
 Category: 思路总结
 Tags: web架构,漏洞,基础知识
 Slug: 
-Authors: bit4
+Authors: bit4woo
 Summary: 
 
 
@@ -127,4 +127,4 @@ Web架构中的安全问题
 				绕过CDN找真实IP
 		特点
 			这些问题都是在简单的测试环境发现不了的
-		by bit4
+		by bit4woo

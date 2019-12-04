@@ -3,7 +3,7 @@ Date: 2017-09-07 10:20
 Category: 红队技能
 Tags: 域控、AD、内网渗透
 Slug: 
-Authors: bit4
+Authors: bit4woo
 Summary: 
 
 注意：以下方法都有一个前提，本机已经加入域控。
