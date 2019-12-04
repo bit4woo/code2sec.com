@@ -26,7 +26,7 @@ Summary: 关于我的blog
 
 
 
-### 0x1、[思维导图](https://github.com/bit4woo/code2sec.com/tree/master/xmind)
+### 0x1、思维导图([更多](https://github.com/bit4woo/code2sec.com/tree/master/xmind))
 
 
 
@@ -42,7 +42,7 @@ web架构中的安全问题 [大图](https://github.com/bit4woo/code2sec.com/raw
 
 
 
-### 0x2、我的开源 
+### 0x2、我的开源 ([更多](https://github.com/bit4woo))
 
 **【[passmaker](https://github.com/bit4woo/passmaker)】根据定制规则生成密码字典**
 
@@ -70,25 +70,19 @@ web架构中的安全问题 [大图](https://github.com/bit4woo/code2sec.com/raw
 
 **【[knife](https://github.com/bit4woo/knife)】一个将有用的小功能加入到右键菜单的burp suite插件**
 
+简介：将多个小的功能菜单加入到burp右键。
+
 
 
 **【[U2C](https://github.com/bit4woo/u2c)】贼好用的Unicode转中文插件**
 
-完全重写，使用新的tab来展示转码后的响应数据包，不影响原始的响应数据包，更加简洁实用！ 
-
-
-
-### 0x3、漏洞复现
-
-[https://github.com/bit4woo/code2sec.com/boom.md](https://github.com/bit4woo/code2sec.com/boom.md)
-
-或
-
-[/boom.md](/boom.md)
+简介：完全重写，使用新的tab来展示转码后的响应数据包，不影响原始的响应数据包，更加简洁实用！ 已合并到knife。
 
 
 
 ### 0x4、关于我
+
+ID: bit4woo
 
 github: https://github.com/bit4woo
 
@@ -100,7 +94,7 @@ Email: bit4woo@163.com
 
 ### 0x5、Mind
 
-1. 
+1. 紧盯目标，在实现目标的过程中学习
 
    Q:know it, then hack it …..so, how to know it ? Don’t learn to HACK – Hack to LEARN  ….so, how to hack learn?
 
