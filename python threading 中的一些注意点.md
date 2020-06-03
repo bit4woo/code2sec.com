@@ -20,8 +20,6 @@ Summary:
 
 **setDaemon()方法**：
 
-主线程A中，创建了子线程B，并且在主线程A中调用了B.setDaemon()，它的含义是【把子线程B设置为守护线程】这时候，要是主线程A执行结束了，就不管子线程B是否完成，一并和主线程A退出.
-
 根据[官方文档](https://docs.python.org/2/library/threading.html#threading.Thread.daemon)
 
 ```
@@ -30,17 +28,26 @@ A boolean value indicating whether this thread is a daemon thread (True) or not 
 The entire Python program exits when no alive non-daemon threads are left.
 ```
 
- “当所有的非守护进程结束的时候，python程序也就结束了！！！”。
 
-因为主线程默认是非守护进程，因此，所有的由该主线程创建的子线程都不是守护进程。也就是说，将某个子线程设置为守护进程，就表明该线程不重要，不能影响主线程是否结束，当主线程结束的时候（也就是所有非守护进程结束的时候）程序直接结束了，这个时候守护线程会被强制结束。
+
+```python
+Daemon 是古希腊神话中人们的守护者角色，伴随着人的一生。这么一想就容易理解了：
+
+当子线程是【守护者线程】，那么当主人（主线程）死亡的时候，守护者（守护者子线程Daemon为True）也会立即死亡。主线程是非守护进程（主人不是守护者！）。
+
+当子线程是【非守护者线程】，可以把它们看做是主人（主线程）的子孙后代（非守护者子线程Daemon为False），子孙后代的生命不会因为父线程生命的结束而结束。
+
+```
+
+
 
 ![](img/pythonThreading/daemon-exit.png)
 
 
 
-<u>总之，用了join()方法，主线程会等子线程结束或超时；而用了setDaemon()方法，主线程结束时子线程会被强制结束。</u>
+<u>总之，用了join()方法，主线程会等子线程结束或超时；而用了setDaemon(True)方法，主线程结束时子线程会被强制结束。</u>
 
-当同时使用了join()和setDaemon()方法时，join会起作用(会等待)，setDaemon失效，因为。测试代码如下。
+当同时使用了join()和setDaemon()方法时，join会起作用(会等待)，setDaemon失效，原因见注释。测试代码如下。
 
 ```python
 # !/usr/bin/env python
