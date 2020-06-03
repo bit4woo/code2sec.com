@@ -31,7 +31,7 @@ The entire Python program exits when no alive non-daemon threads are left.
 
 
 ```python
-Daemon 是古希腊神话中人们的守护者角色，伴随着人的一生。这么一想就容易理解了：
+Daemon 是古希腊神话中人们的守护者精灵之类的角色，伴随着人的一生，是随着主人的消亡而消亡的。这么一想就容易理解了：
 
 当子线程是【守护者线程】，那么当主人（主线程）死亡的时候，守护者（守护者子线程Daemon为True）也会立即死亡。主线程是非守护进程（主人不是守护者！）。
 
