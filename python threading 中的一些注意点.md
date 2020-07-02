@@ -45,41 +45,127 @@ Daemon 是古希腊神话中人们的守护者精灵之类的角色，伴随着�
 
 
 
-<u>总之，用了join()方法，主线程会等子线程结束或超时；而用了setDaemon(True)方法，主线程结束时子线程会被强制结束。</u>
+**同时使用join()和setDaemon()方法**
 
-当同时使用了join()和setDaemon()方法时，join会起作用(会等待)，setDaemon失效，原因见注释。测试代码如下。
+用了join()方法，主线程会等子线程结束或超时，控制的是主线程的行为；而用了setDaemon(True)方法，主线程结束时子线程会被强制结束，控制的是子线程的行为。
+
+当同时使用setDaemon(True)方法和join()方法时。可以实现：主线程给子线程足够的时间去完成任务，也能在主线程退出时让子线程也结束，能更好的控制子线程的行为。
 
 ```python
 # !/usr/bin/env python
 # -*- coding:utf-8 -*-
-__author__ = 'bit4'
+__author__ = 'bit4woo'
 __github__ = 'https://github.com/bit4woo'
 
 import time
 import threading
 
-def fun():
-    print "sub thread start"
+def sub_thread_fun():
+    print ("sub thread start")
     while True:
         time.sleep(1)
-        print "sub is alive"
-    print "sub thread end"
+        print ("sub is alive")
+    print ("sub thread end")
+
 
 try:
-    print "main thread start"
-    t1 = threading.Thread(target=fun,args=())
+    print ("main thread start")
+    t1 = threading.Thread(target=sub_thread_fun,args=())
     t1.setDaemon(True)
     t1.start()
-    t1.join()#当同时使用setDaemon(True)方法和join()方法时，当然是join方法生效啊。
-    # 因为setDaemon()方法必须在start()之前，而join方法必须在start()方法之后。join覆盖了setDaemon的作用。
-    t1.join()
-    t1.join()#多次join无影响
+    t1.join(3)#当同时使用setDaemon(True)方法和join()方法时。可以实现：主线程给子线程足够的时间去完成任务，也能在主线程退出时让子线程也结束，能更好的控制子线程的行为。
+    t1.join(3)
+    t1.join(3)#多次join无影响,但如果加入时间参数，将是等待多个时间参数之和
     time.sleep(3)
-    print "main thread end"
-    print "sub thread is alive ? {0}".format(t1.is_alive())
+    print ("main thread end")
+    print ("sub thread is alive ? {0}".format(t1.is_alive()))
 except KeyboardInterrupt as e:
-    print "exit"
+    print(e)
+    print ("exit")
+
 ```
+
+![daemon-and-join](img/pythonThreading/daemon-and-join.png)
+
+
+
+类似的Java代码举例，Java中可以用Interrupt来强制结束主线程（python中没有对应的方法，目前已知的就是：关闭程序、设置join超时时间）。在Java中同时使用setDaemon(true)和join()方法，可以随时暴力干掉所有主线程和子线程。
+
+```java
+package test;
+
+import java.util.ArrayList;
+
+public class threadExampleForceStop extends Thread{
+	public static void main(String args[]) throws Exception{
+		threadExampleForceStop xxx = new threadExampleForceStop();
+		xxx.start();
+		Thread.sleep(1*60);
+		xxx.interrupt();
+	}
+
+	@Override
+	public void run() {
+		ArrayList<Producertest> plist = new ArrayList<Producertest>();
+
+		for (int i=0;i<=5;i++) {
+			Producertest p = new Producertest(i);
+			p.setDaemon(true);//将子线程设置为守护线程，会随着主线程的结束而立即结束
+			p.start();
+			plist.add(p);
+		}
+
+		/*方法1：
+		for (Producertest p:plist) {
+			try {
+				p.join();
+				//让主线程等待各个子线程执行完成，才会结束。
+				//https://www.cnblogs.com/zheaven/p/12054044.html
+			} catch (InterruptedException e) {
+				System.out.println("force stop received");
+				//e.printStackTrace();
+				break;//必须跳出循环，否则只是不再等待其中的一个线程，还会继续等待其他线程
+			}
+		}*/
+
+		try {
+			for (Producertest p:plist) {
+				p.join();
+				//让主线程等待各个子线程执行完成，才会结束。
+				//https://www.cnblogs.com/zheaven/p/12054044.html
+			}
+		} catch (InterruptedException e) {
+			System.out.println("force stop received");
+			//e.printStackTrace();
+		}
+		System.out.println("main thread exit");
+		return;
+	}
+}
+
+class Producertest extends Thread {
+	private int threadNo;
+	public Producertest(int threadNo) {
+		this.threadNo = threadNo;
+	}
+	@Override
+	public void run() {
+		while (true) {
+			try {
+				System.out.println("Produced thread:"+ threadNo+" is alive");
+				Thread.sleep(1*60);
+				System.out.println("Produced thread:"+ threadNo+" is alive");
+			} catch (Exception err) {
+				err.printStackTrace();
+			}
+		}
+	}
+}
+```
+
+![daemon-and-join-java](img/pythonThreading/daemon-and-join-java.png)
+
+
 
 
 
