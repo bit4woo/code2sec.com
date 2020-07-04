@@ -6,37 +6,38 @@ Slug:
 Authors: bit4woo
 Summary: 
 
-### **0x0、基础**
+### 0x0、完整调用链的基本组成
 
-Gadget是什么？
-
-
-
-Gadget需要满足什么条件？
-
-
-
-### 一个完整调用链的基本组成
-
-作为gadget的类的基本特征（寻找同类gadget的思路）：
-
-一个类就是一个环节，就像链条的一个扣：
+作为gadget的类都具有一些基本特征，对这些特征的梳理，有助于我们理解已有的gadget（比如ysoserial中的），也可以根据这些思路去寻找同类gadget。**一个类就是一个环节，就像链条的一个扣**：
 
 **入口类：**
-1、实现了Serializable即可并重写了readObject()方法；或者实现了Externalization接口，重写了readExternal()方法；
+1、这个类需要实现了Serializable接口并重写了readObject()方法；或者实现了Externalization接口，重写了readExternal()方法；
 2、重写的方法中有特定的逻辑。大致分为2类：
-	一、具有【调用其他类的某个函数方法】的能力，比如通过invoke()反射机制调用，比如直接调用其他类的某个函数方法：
-	二、具有直接执行任意命令、发起DNS请求等最终需要实现的能力，这种情况基本没有。如果是这种情况，就需要后面的环节了。
+	一、具有【调用其他类的某个函数方法】的能力，比如通过invoke()反射机制调用、比如直接调用其他类的某个函数方法、比如转JNDI注入等。
+	二、具有直接执行任意命令、发起DNS请求等最终需要实现的能力，这种情况基本没有。如果是这种情况，就不再需要后面的环节了，他既是入口类，也是目的实现类。
+
+```
+这里联想一下fastjson反序列化漏洞中的入口类：
+
+1、这个类需要有无参构造函数，属性有对应的getter、setter函数。
+2、setter函数有有特定的逻辑转其他函数，同上。
+
+JdbcRowSetImpl aa = new JdbcRowSetImpl();
+aa.setDataSourceName("rmi://127.0.0.1:8088/calc");
+aa.setAutoCommit(true);//转JNDI
+```
 
 **中间衔接类：**
 1、它的某个函数方法可以被入口类调用，直接被调用或通过invoke等反射机制被调用都可以。
 2、被调用的这个函数方法，还可以再调用其他类的某个函数方法。
 
-它的关键作用就是 承上启下，动态代理(proxy)的特性就具有这种能力
+它的关键作用就是 承上启下，动态代理(Dynamic Proxy)的特性就具有这种能力（在CommonsCollections1和Jdk7u21 的gadget中就使用了AnnotationInvocationHandler这个动态代理类）。
 
 **目的实现类：**
 1、它的某个函数方法具有直接执行任意命令、发起DNS请求等最终需要实现的能力。
 2、这个函数方法，可以被入口类、或中间衔接类调用。
+
+举例说明
 
 ```java
 URLDNS的调用链 Gadget Chain:
@@ -65,11 +66,7 @@ http://blog.topsec.com.cn/ad_lab/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%
 
 
 
-
-
-
-
-**如何在代码中寻找Gadget？**
+### 0x1、如何在代码中寻找Gadget
 
 1.正向：找到一个对象，它的readObject是重写过的，而且其中的代码可能调用任意代码。。readobject 是入口，，，这个重写了的方法中，有某个逻辑，具有执行任意代码的能力。
 
@@ -180,8 +177,6 @@ JAVA中间件通常通过网络接收客户端发送的序列化数据，JAVA中
 ### **0x2、动态代理demo及理解**
 
 
-
- 
 
 
 
