@@ -14,6 +14,49 @@ Gadget是什么？
 
 Gadget需要满足什么条件？
 
+
+
+### 一个完整调用链的基本组成
+
+作为gadget的类的基本特征（寻找同类gadget的思路）：
+
+一个类就是一个环节，就像链条的一个扣：
+
+**入口类：**
+1、实现了Serializable即可并重写了readObject()方法；或者实现了Externalization接口，重写了readExternal()方法；
+2、重写的方法中有特定的逻辑。大致分为2类：
+	一、具有【调用其他类的某个函数方法】的能力，比如通过invoke()反射机制调用，比如直接调用其他类的某个函数方法：
+	二、具有直接执行任意命令、发起DNS请求等最终需要实现的能力，这种情况基本没有。如果是这种情况，就需要后面的环节了。
+
+**中间衔接类：**
+1、它的某个函数方法可以被入口类调用，直接被调用或通过invoke等反射机制被调用都可以。
+2、被调用的这个函数方法，还可以再调用其他类的某个函数方法。
+
+它的关键作用就是 承上启下，动态代理(proxy)的特性就具有这种能力
+
+**目的实现类：**
+1、它的某个函数方法具有直接执行任意命令、发起DNS请求等最终需要实现的能力。
+2、这个函数方法，可以被入口类、或中间衔接类调用。
+
+```java
+URLDNS的调用链 Gadget Chain:
+
+	  HashMap.readObject()
+	    HashMap.putVal()
+	      HashMap.hash()
+	        URL.hashCode()
+	          Handler(URLStreamHandler).hashCode(URL)
+	        	URLStreamHandler.getHostAddress(URL)
+          
+//HashMap是入口类：1、它实现了Serializable，并重写了readObject()方法。2、重写的readObject()方法中，调用putVal()的逻辑，最终调用了URL的方法，满足了“调用其他类的某个函数方法”。
+
+//URL是中间衔接类：它被HashMap.hash()调用，又调用了handler.hashCode()。
+          
+//URLStreamHandler是目的实现类：它的getHostAddress()方法最终会发起DNS查询。并且被handler.hashCode()调用，handler.hashCode()又被URL.hashCode()这个中间类的函数调用了。
+```
+
+![URLDNS-Gadget-Chain](img/JavaDeserStep4/URLDNS-Gadget-Chain.png)
+
 前面已经说过，我们现在已经可以构造特殊的bytestream并且通过反序列化来还原成为一个Object并且该Object的构造函数和类的构造函数都已经被调用。那么哪些类的构造函数能够提供执行代码的能力。研究者们发现如果一个应用classpath中使用了common-collections,那么就有了非常好用的ChainedTransformer和InvokerTransformer,后者甚至构造函数中直接提供了根据传入的类名和函数名反射执行之的能力!
 
 http://blog.topsec.com.cn/ad_lab/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90/
