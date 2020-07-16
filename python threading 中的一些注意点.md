@@ -474,3 +474,93 @@ response= requests.get(url,verify=False,timeout=(5, 27))
         else:
             t.join(30)
 ```
+
+
+
+#### 常用模板
+
+```python
+# !/usr/bin/env python
+# -*- coding:utf-8 -*-
+__author__ = 'bit4woo'
+__github__ = 'https://github.com/bit4woo'
+
+import sys, os
+import datetime
+import threading
+try:
+    from queue import Queue #python3
+except Exception as e:
+    import Queue  # python2
+    pass
+
+def ThreadRunner(inputList, threadNumber=100):
+    try:  # python3
+        input_Queue = Queue()
+        output_queue = Queue()
+    except Exception as e:  # python2
+        input_Queue = Queue.Queue()
+        output_queue = Queue.Queue()
+
+    for item in inputList:
+        input_Queue.put(item.strip())
+
+    Threadlist = []
+    for i in range(int(threadNumber)):
+        dt = Customer(input_Queue, output_queue)
+        dt.setDaemon(True)
+        dt.start()
+        Threadlist.append(dt)
+    for item in Threadlist:
+        item.join()
+
+    resultlist = []
+
+    while not output_queue.empty():
+        itemx = output_queue.get(timeout=0.1)
+        resultlist.append(itemx)
+
+    resultlist = list(set(resultlist))
+    return resultlist
+
+
+class Customer(threading.Thread):
+    def __init__(self, input_Queue, output_queue):
+        threading.Thread.__init__(self)
+        self.input_Queue = input_Queue
+        self.output_queue = output_queue
+
+    def run(self):
+        while True:
+            if self.input_Queue.empty():
+                break
+            item = self.input_Queue.get(1)
+            try:
+                result = Do_Your_Task_In_This_Function(item)
+                self.output_queue.put(result)
+            except Exception as e:
+                print(item+" "+str(e))
+
+def writefile(list, outputfile=None):
+    if outputfile == None:
+        now = datetime.datetime.now()
+        timestr = now.strftime("-%Y-%m-%d-%H-%M")
+        outputfile = "ThreadRunner" + timestr + ".txt"
+    outputfile = os.path.join(os.path.dirname(__file__), "..", "output", outputfile)
+    open(outputfile, "w").writelines("\n".join(list.__str__()))
+
+
+def Do_Your_Task_In_This_Function(input):  # do your job in this function!!
+
+    return input
+
+
+if __name__ == "__main__":
+    result = ThreadRunner(open(r"zookeeper.txt", "r").readlines())
+    result.remove("")
+    print("发现{0}个有效目标".format(len(result)))
+    for item in result:
+        print(item)
+
+```
+
