@@ -26,7 +26,8 @@ LINKS = (('re4lity', 'http://rinige.com/'),
 	 ('廖新喜','http://xxlegend.com/'),
 	 ('PHITHON','https://www.leavesongs.com/'),
 	 ('勾陈安全','http://www.polaris-lab.com/'),
-	 ('R4v3zn','https://www.r4v3zn.com/'),)
+	 ('R4v3zn','https://www.r4v3zn.com/'),
+     ('c0ny1','http://gv7.me/'),)
 
 # Social widget
 SOCIAL = (('github', 'https://github.com/bit4woo'),
