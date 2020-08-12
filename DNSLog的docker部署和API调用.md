@@ -280,7 +280,7 @@ class DNSlog():
         self.subdomain = hashlib.md5(str(time.time())).hexdigest()
         self.user_host = "bit.0y0.link"
         self.api_host = "admin.0y0.link"
-        self.API_token = "3005b3d03d5f7aa975b5025145bbas8a"
+        self.API_token = "ec6fd9c36cca4dac36fcaba1cfed3sce"
         self.username= "bit4woo"
         self.password = "password"
 
@@ -289,7 +289,7 @@ class DNSlog():
         return payload
 
     # to get token
-    def __freshToken__(self,username=None,password=None):
+    def __getToken__(self,username=None,password=None):
         if username != None:
             self.username = username
         if password != None:
@@ -302,14 +302,14 @@ class DNSlog():
             token = json.loads(response.content)["token"]
             if status == True:
                 self.API_token = token
-                print("fresh API token successed")
+                print("get API token successed")
                 return True
             else:
-                print("fresh API token failed")
+                print("get API token failed")
                 return False
         else:
             print("DNSlog Server Error!")
-            print("fresh API token failed")
+            print("get API token failed")
             return False
 
     def query(self,subdomain=None,type="dns",token=None):
@@ -329,10 +329,15 @@ class DNSlog():
         try:
             rep = requests.get(url, timeout=60, verify=False, allow_redirects=False)
             status = json.loads(rep.content)["status"]
+            content = json.loads(rep.content)["content"]
             if status ==True:
-                return status
+                if len(content)>=1:
+                    return True
+                else:
+                    return False
             else:
-                self.__freshToken__()
+                print("you should check you token!!!")
+                self.__getToken__()
                 rep = requests.get(url, timeout=60, verify=False, allow_redirects=False)
                 status = json.loads(rep.content)["status"]
                 return status
@@ -356,13 +361,7 @@ class DNSlog():
         try:
             rep = requests.get(url, timeout=60, verify=False, allow_redirects=False)
             status = json.loads(rep.content)["status"]
-            if status ==True:
-                return status
-            else:
-                self.__freshToken__()
-                rep = requests.get(url, timeout=60, verify=False, allow_redirects=False)
-                status = json.loads(rep.content)["status"]
-                return status
+            return status
         except Exception as e:
             return False
 
