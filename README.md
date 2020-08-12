@@ -90,6 +90,8 @@ blog: http://code2sec.com
 
 Email: bit4woo@163.com
 
+wechat:bit4woo
+
 
 
 ### 0x5、Mind
