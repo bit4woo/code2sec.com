@@ -137,13 +137,13 @@ cd /DNSLog/dnslog/
 git pull
 #恢复数据库和配置文件
 mv /DNSLog/dnslog/dnslog/settings.py.bak /DNSLog/dnslog/dnslog/settings.py
-mv /DNSLog/dnslog/dsqlite3.bak /DNSLog/dnslog/dsqlite3
+mv /DNSLog/dnslog/db.sqlite3.bak /DNSLog/dnslog/db.sqlite3
 
 #如果操作过程中docker自动退出而无法启动，可以通过docker cp进行文件的操作
-root@dnslog:~# docker cp cranky_cray:/DNSLog/dnslog/dnslog/settings.py.bak settings.py.bak
+root@dnslog:~# docker cp cranky_cray:/DNSLog/dnslog/dnslog/settings.py settings.py.bak
 root@dnslog:~# docker cp settings.py.bak cranky_cray:/DNSLog/dnslog/dnslog/settings.py
 
-root@dnslog:~# docker cp cranky_cray:/DNSLog/dnslog/db.sqlite3.bak db.sqlite3.bak
+root@dnslog:~# docker cp cranky_cray:/DNSLog/dnslog/db.sqlite3 db.sqlite3.bak
 root@dnslog:~# docker cp db.sqlite3.bak cranky_cray:/DNSLog/dnslog/db.sqlite3
 ```
 
