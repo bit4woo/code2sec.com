@@ -28,15 +28,22 @@ A boolean value indicating whether this thread is a daemon thread (True) or not 
 The entire Python program exits when no alive non-daemon threads are left.
 ```
 
+![image-20220401184124961](python threading 中的一些注意点.assets/image-20220401184124961.png)
 
+![image-20220401184615481](python threading 中的一些注意点.assets/image-20220401184615481.png)
 
 ```python
 Daemon 是古希腊神话中人们的守护者精灵之类的角色，伴随着人的一生，是随着主人的消亡而消亡的。这么一想就容易理解了：
 
-当子线程是【守护者线程】，那么当主人（主线程）死亡的时候，守护者（守护者子线程Daemon为True）也会立即死亡。主线程是非守护进程（主人不是守护者！）。
+当子线程是【守护者线程】，那么当【主人】（主线程）死亡的时候，守护者（守护者子线程Daemon为True）也会立即死亡。主线程是非守护进程（主人不是守护者！）。
 
-当子线程是【非守护者线程】，可以把它们看做是主人（主线程）的子孙后代（非守护者子线程Daemon为False），子孙后代的生命不会因为父线程生命的结束而结束。
+当子线程是【非守护者线程】，可以把它们看做是【主人】（主线程）的子孙后代（非守护者子线程Daemon为False），子孙后代的生命不会因为父线程生命的结束而结束。
 
+注意：这里的【主人】应该是指的整个python程序或整个Java程序（等同JVM实例），而不是创建子线程的父线程！！！
+之前就理解错了，把【主人】理解成了创建子线程的父线程，其实这是不对的。
+
+假如3个线程：A创建B，B创建C，且C为Daemon线程。如果B执行完成退出，而A还没有退出，那么C将继续执行，并不会因为B的退出而退出！
+如果错把【主人】理解成C的创建者B，那么C就应该退出，与事实不符。
 ```
 
 
@@ -117,7 +124,7 @@ public class threadExampleForceStop extends Thread{
 
 		for (int i=0;i<=5;i++) {
 			Producertest p = new Producertest(i);
-			p.setDaemon(true);//将子线程设置为守护线程，会随着主线程的结束而立即结束
+			p.setDaemon(true);//将子线程设置为守护线程，会随着主线程（是整个JVM，不是创建它的父线程！！）的结束而立即结束
 			p.start();
 			plist.add(p);
 		}
@@ -172,7 +179,9 @@ class Producertest extends Thread {
 
 ![daemon-and-join-java](img/pythonThreading/daemon-and-join-java.png)
 
-注意！！！：如果JVM不退出，Daemon子线程还是会继续执行！只有当主线程退出时，JVM也同时退出时，Daemon子线程才会被终止。在这种情况下想要正确结束子线程，还是需要有自己的的控制逻辑！
+注意！！！：如果JVM不退出，Daemon子线程还是会继续执行！Daemon的真正主人是JVM，不是创建它的父线程。在这种情况下想要正确结束Daemon线程，还是需要有自己的的控制逻辑！
+
+如下图：
 
 ![](python threading 中的一些注意点.assets/image-20220401151827722-8797641.png)
 
