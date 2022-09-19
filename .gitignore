@@ -1,3 +1,4 @@
 
 *.xml
 template.md
+.DS_Store
